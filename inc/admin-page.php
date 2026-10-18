@@ -87,6 +87,7 @@ function gl_admin_page() {
 
 		<h2 style="margin-top:2em">Wo pflege ich was?</h2>
 		<ul style="list-style:disc;padding-left:20px;max-width:720px">
+			<li><strong>Texte und Absender aller E-Mails:</strong> <a href="<?php echo esc_url( admin_url( 'admin.php?page=ghostlike-emails' ) ); ?>">GHOSTLIKE → E-Mails</a>.</li>
 			<li><strong>Alle Updates mit einem Klick:</strong> <a href="<?php echo esc_url( admin_url( 'admin.php?page=ghostlike-updates' ) ); ?>">GHOSTLIKE → Updates</a>.</li>
 			<li><strong>Videos zu bunny.net hochladen und als Header-Video eintragen:</strong> <a href="<?php echo esc_url( admin_url( 'admin.php?page=ghostlike-videos' ) ); ?>">GHOSTLIKE → Videos</a>.</li>
 			<li><strong>Sektionen ein/aus, Reihenfolge, Menü:</strong> <a href="<?php echo esc_url( admin_url( 'customize.php?autofocus[section]=gl_sections' ) ); ?>">Customizer → GHOSTLIKE → Sektionen &amp; Menü</a>.</li>

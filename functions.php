@@ -26,6 +26,8 @@ require GL_DIR . '/inc/sections.php';
 require GL_DIR . '/inc/upgrade.php';
 require GL_DIR . '/inc/tools-updates.php';
 require GL_DIR . '/inc/tools-bunny.php';
+require GL_DIR . '/inc/emails.php';
+require GL_DIR . '/inc/emails-admin.php';
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );

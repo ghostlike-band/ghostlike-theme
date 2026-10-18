@@ -46,11 +46,10 @@ function gl_contact_submit( WP_REST_Request $req ) {
 	$topic  = isset( $topics[ $topic ] ) ? $topic : 'general';
 	$to     = gl_opt( 'contact_email_' . $topic ) ?: gl_opt( 'contact_email' ) ?: get_option( 'admin_email' );
 
-	$subject = sprintf( '[ghostlike.de · %s] Nachricht von %s', $topics[ $topic ], $name );
-	$body    = "Thema: {$topics[$topic]}\nName: {$name}\nE-Mail: {$email}\n\n{$message}\n\n— gesendet über das Kontaktformular auf " . home_url();
 	$headers = array( 'Reply-To: ' . $name . ' <' . $email . '>' );
+	$sent    = gl_send_email( $to, 'contact', array( 'thema' => $topics[ $topic ], 'name' => $name, 'email' => $email, 'nachricht' => $message ), $headers );
 
-	if ( ! wp_mail( $to, $subject, $body, $headers ) ) {
+	if ( ! $sent ) {
 		return new WP_REST_Response( array( 'ok' => false, 'message' => 'Sending failed. Please write us directly via Instagram.' ), 500 );
 	}
 	return new WP_REST_Response( array( 'ok' => true ), 200 );
