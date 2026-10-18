@@ -15,7 +15,7 @@ add_action( 'admin_post_gl_demo_import', function () {
 		@set_time_limit( 300 );
 		gl_demo_import();
 	}
-	wp_safe_redirect( admin_url( 'themes.php?page=ghostlike&demo=1' ) );
+	wp_safe_redirect( admin_url( 'admin.php?page=ghostlike&demo=1' ) );
 	exit;
 } );
 
@@ -25,7 +25,7 @@ add_action( 'admin_post_gl_demo_remove', function () {
 		wp_die( 'Keine Berechtigung.' );
 	}
 	gl_demo_remove();
-	wp_safe_redirect( admin_url( 'themes.php?page=ghostlike&demo=removed' ) );
+	wp_safe_redirect( admin_url( 'admin.php?page=ghostlike&demo=removed' ) );
 	exit;
 } );
 

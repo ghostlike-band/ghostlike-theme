@@ -6,7 +6,22 @@
 defined( 'ABSPATH' ) || exit;
 
 add_action( 'admin_menu', function () {
-	add_theme_page( 'GHOSTLIKE', 'GHOSTLIKE', 'manage_options', 'ghostlike', 'gl_admin_page' );
+	$icon  = 'data:image/svg+xml;base64,' . base64_encode( '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 -10 252 310"><path fill="black" d="M170.1,69c0-6.6-5.7-11.1-12.3-11.1s-12.9,4.8-17.7,10.2c-5.7,6.6-11.1,12.3-21,13.8-11.1-3.9-24.3-6-39-6C34.5,75.9,1.2,96,1.2,130.2c0,20.1,12.6,33.3,31.5,41.1C15.6,179.1,0,191.1,0,209.7c0,12.3,8.7,34.8,50.4,34.8h56.7c12,0,18.6,3.6,18.6,12.9,0,8.7-5.7,18.9-22.5,18.9-3.3,0-6.9,1.5-6.9,5.7,0,4.5,5.1,6.3,10.5,6.3,40.8,0,60.9-25.8,60.9-49.2,0-26.1-18.9-42.6-63.3-42.6h-59.1c-9.9,0-13.5-3.3-13.5-8.1,0-5.1,4.2-9.6,9.6-14.1,11.1,3,23.4,4.5,36.3,4.5,44.1,0,78-17.7,78-49.2,0-18.6-9.3-33-25.2-42.3,26.7-1.5,39.6-6.6,39.6-18.3ZM80.1,167.7c-15.3,0-22.5-17.7-22.5-42s6.3-37.8,19.8-37.8c15.6,0,22.2,18,22.2,41.1,0,24.9-6.3,38.7-19.5,38.7Z"/></svg>' );
+	$count = function_exists( 'gl_pending_updates' ) ? count( gl_pending_updates() ) : 0;
+	$badge = $count ? ' <span class="update-plugins count-' . $count . '"><span class="update-count">' . $count . '</span></span>' : '';
+	add_menu_page( 'GHOSTLIKE', 'GHOSTLIKE' . $badge, 'manage_options', 'ghostlike', 'gl_admin_page', $icon, 3 );
+	add_submenu_page( 'ghostlike', 'GHOSTLIKE – Übersicht', 'Übersicht', 'manage_options', 'ghostlike', 'gl_admin_page' );
+	add_submenu_page( 'ghostlike', 'GHOSTLIKE – Updates', 'Updates' . $badge, 'update_plugins', 'ghostlike-updates', 'gl_updates_page' );
+	add_submenu_page( 'ghostlike', 'GHOSTLIKE – Videos', 'Videos (bunny.net)', 'upload_files', 'ghostlike-videos', 'gl_videos_page' );
+} );
+
+// Alte Adresse (Design → GHOSTLIKE) weiterleiten
+add_action( 'admin_init', function () {
+	global $pagenow;
+	if ( $pagenow === 'themes.php' && ( $_GET['page'] ?? '' ) === 'ghostlike' ) {
+		wp_safe_redirect( admin_url( 'admin.php?page=ghostlike' ) );
+		exit;
+	}
 } );
 
 add_action( 'admin_post_gl_check_updates', function () {
@@ -17,7 +32,7 @@ add_action( 'admin_post_gl_check_updates', function () {
 	gl_latest_release( true );
 	delete_site_transient( 'update_themes' );
 	wp_update_themes();
-	wp_safe_redirect( admin_url( 'themes.php?page=ghostlike&checked=1' ) );
+	wp_safe_redirect( admin_url( 'admin.php?page=ghostlike&checked=1' ) );
 	exit;
 } );
 
@@ -72,6 +87,8 @@ function gl_admin_page() {
 
 		<h2 style="margin-top:2em">Wo pflege ich was?</h2>
 		<ul style="list-style:disc;padding-left:20px;max-width:720px">
+			<li><strong>Alle Updates mit einem Klick:</strong> <a href="<?php echo esc_url( admin_url( 'admin.php?page=ghostlike-updates' ) ); ?>">GHOSTLIKE → Updates</a>.</li>
+			<li><strong>Videos zu bunny.net hochladen und als Header-Video eintragen:</strong> <a href="<?php echo esc_url( admin_url( 'admin.php?page=ghostlike-videos' ) ); ?>">GHOSTLIKE → Videos</a>.</li>
 			<li><strong>Sektionen ein/aus, Reihenfolge, Menü:</strong> <a href="<?php echo esc_url( admin_url( 'customize.php?autofocus[section]=gl_sections' ) ); ?>">Customizer → GHOSTLIKE → Sektionen &amp; Menü</a>.</li>
 			<li><strong>Header-Slider:</strong> links im Menü „Hero-Slides“. Reihenfolge über „Reihenfolge“ (Seiten-Attribute). Pro Slide optional eigenes Bild/Video fürs Handy.</li>
 			<li><strong>Ideale Größen Header:</strong> Bild 2400 × 1350 px (Handy 1080 × 1920), unter 400 KB · Video 1920 × 1080 oder 1280 × 720, H.264-MP4, 10–20 s, ohne Ton, unter 8 MB (Handy 720 × 1280, unter 5 MB).</li>
