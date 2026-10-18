@@ -41,7 +41,7 @@ function gl_admin_page() {
 			<tbody>
 				<tr><td>Installiert</td><td><strong><?php echo esc_html( GL_VERSION ); ?></strong></td></tr>
 				<tr><td>Neueste auf GitHub</td><td><?php echo $release ? '<strong>' . esc_html( $release['version'] ) . '</strong>' : '– (noch kein Release gefunden)'; ?></td></tr>
-				<tr><td>Repository</td><td><code><?php echo esc_html( GL_GITHUB_REPO ); ?></code></td></tr>
+				<tr><td>Repository</td><td><a href="<?php echo esc_url( 'https://github.com/' . GL_GITHUB_REPO . '/releases' ); ?>" target="_blank" rel="noopener"><code><?php echo esc_html( GL_GITHUB_REPO ); ?></code> – alle Versionen ↗</a></td></tr>
 			</tbody>
 		</table>
 		<p>

@@ -32,7 +32,7 @@
 		</div>
 	</div>
 	<div class="footer__base meta">
-		<span><?php echo esc_html( gl_opt( 'footer_meta' ) ); ?></span><span>© <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?></span>
+		<span><?php echo esc_html( gl_opt( 'footer_meta' ) ); ?></span><span>© <?php echo esc_html( wp_date( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?></span>
 	</div>
 </footer>
 
