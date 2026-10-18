@@ -42,7 +42,6 @@ add_action( 'customize_register', function ( WP_Customize_Manager $c ) {
 	$add( 'bio_heading', 'gl_band', 'Bio-Headline', 'textarea', 'sanitize_textarea_field', 'Zeilenumbruch = neue Zeile.' );
 	$add( 'bio_lead', 'gl_band', 'Bio – erster Absatz', 'textarea', 'sanitize_textarea_field' );
 	$add( 'bio_text', 'gl_band', 'Bio – zweiter Absatz', 'textarea', 'sanitize_textarea_field' );
-	$add( 'members', 'gl_band', 'Mitglieder', 'textarea', 'sanitize_textarea_field', 'Eine Zeile pro Person: Name | Instrument' );
 	$add( 'bio_cta_text', 'gl_band', 'Button-Text (leer = kein Button)' );
 	$add( 'bio_cta_url', 'gl_band', 'Button-Link', 'text', 'gl_sanitize_link' );
 	$add( 'bio_caption', 'gl_band', 'Bildunterschrift' );

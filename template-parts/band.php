@@ -28,13 +28,6 @@ $cta_url = str_starts_with( (string) $cta_url, '#' ) ? gl_anchor( substr( $cta_u
 				<a href="<?php echo esc_url( $cta_url ); ?>" class="btn" data-reveal<?php echo gl_target( $cta_url ); ?>><?php echo esc_html( gl_opt( 'bio_cta_text' ) ); ?> <span class="pfeil">↗</span></a>
 			<?php endif; ?>
 		</div>
-		<?php $members = gl_pipe_rows( gl_opt( 'members' ) ); if ( $members ) : ?>
-			<ul class="members" data-stagger>
-				<?php foreach ( $members as $m ) : ?>
-					<li><span class="label"><?php echo esc_html( $m[0] ); ?></span><span class="meta"><?php echo esc_html( $m[1] ?? '' ); ?></span></li>
-				<?php endforeach; ?>
-			</ul>
-		<?php endif; ?>
 	</div>
 	<figure class="band__img" data-reveal="clip">
 		<picture>

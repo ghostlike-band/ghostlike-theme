@@ -185,7 +185,7 @@
 
 /* ---------- BAND ---------- */
 .band { display: grid; gap: clamp(36px, 5vw, 72px); }
-.band__grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: end; }
+.band__grid { display: grid; gap: clamp(32px, 6vw, 96px); }
 .band__body { display: grid; gap: 24px; justify-items: start; }
 .band__bio { margin: 0; max-width: 56ch; font-size: 19px; color: var(--kalk); }
 .band__bio--klein { font-size: 17px; }
@@ -336,4 +336,7 @@ body.admin-bar .nav { top: 32px; }
   .feed { grid-template-columns: repeat(2, 1fr); }
   .footer__grid { grid-template-columns: 1fr 1fr; }
   .btn { padding: 12px 16px; }
+  /* Pfeile in Buttons nur am Desktop */
+  .btn .pfeil { display: none; }
+  .stream__pfeil { visibility: hidden; }
 }
