@@ -55,7 +55,7 @@ function gl_admin_page() {
 		<table class="widefat striped" style="max-width:720px">
 			<tbody>
 				<tr><td>Installiert</td><td><strong><?php echo esc_html( GL_VERSION ); ?></strong></td></tr>
-				<tr><td>Neueste auf GitHub</td><td><?php echo $release ? '<strong>' . esc_html( $release['version'] ) . '</strong>' : '– (noch kein Release gefunden)'; ?></td></tr>
+				<tr><td>Neueste auf GitHub</td><td><?php echo $release ? '<strong>' . esc_html( $release['version'] ) . '</strong>' : '– (nicht erreichbar' . ( get_option( 'gl_update_error' ) ? ': ' . esc_html( get_option( 'gl_update_error' ) ) : '' ) . ')'; ?></td></tr>
 				<tr><td>Repository</td><td><a href="<?php echo esc_url( 'https://github.com/' . GL_GITHUB_REPO . '/releases' ); ?>" target="_blank" rel="noopener"><code><?php echo esc_html( GL_GITHUB_REPO ); ?></code> – alle Versionen ↗</a></td></tr>
 			</tbody>
 		</table>
