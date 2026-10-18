@@ -37,7 +37,7 @@ function gl_defaults() {
 		'contact_email_booking' => '',
 		'contact_email_press'   => '',
 		'privacy_url'     => get_privacy_policy_url(),
-		'member_login_url'=> wp_login_url(),
+		'member_login_url'=> home_url( '/portal/' ),
 		'footer_meta'     => 'Style GL-27 / Ära I',
 	);
 }
