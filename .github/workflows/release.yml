@@ -1,0 +1,36 @@
+# Baut bei jedem Tag „v1.2.3“ die Datei ghostlike.zip und hängt sie an ein GitHub-Release.
+# WordPress (inc/updater.php) findet das Release und bietet das Update per Klick an.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version prüfen (Tag = style.css)
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          VER=$(grep -m1 '^Version:' style.css | awk '{print $2}')
+          if [ "$TAG" != "$VER" ]; then
+            echo "::error::Tag $TAG passt nicht zur Version $VER in style.css"
+            exit 1
+          fi
+
+      - name: ZIP bauen
+        run: |
+          mkdir -p build/ghostlike
+          rsync -a --exclude-from=.distignore ./ build/ghostlike/
+          cd build && zip -rq ghostlike.zip ghostlike
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: build/ghostlike.zip
+          generate_release_notes: true
