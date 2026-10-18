@@ -40,20 +40,10 @@ foreach ( gl_platforms() as $key => $pl ) {
 
 			<?php $tracks = gl_pipe_rows( gl_meta( $id, 'tracks' ) ); if ( $tracks ) : ?>
 				<ol class="tracks" data-stagger>
-					<?php foreach ( $tracks as $n => $t ) :
-						$single = isset( $t[1] ) && strtolower( $t[1] ) === 'single';
-						$video  = $t[2] ?? '';
-						$tcover = $t[3] ?? '';
-						?>
+					<?php foreach ( $tracks as $n => $t ) : $video = $t[2] ?? ''; ?>
 						<li class="track">
 							<span class="meta"><?php echo esc_html( str_pad( (string) ( $n + 1 ), 2, '0', STR_PAD_LEFT ) ); ?></span>
-							<?php if ( $tcover ) : ?>
-								<img class="track__cover" src="<?php echo esc_url( $tcover ); ?>" alt="" loading="lazy">
-							<?php else : ?>
-								<span class="track__cover track__cover--leer"></span>
-							<?php endif; ?>
 							<span class="label"><?php echo esc_html( $t[0] ); ?></span>
-							<?php echo $single ? '<span class="tag-s">Single</span>' : '<span></span>'; ?>
 							<?php if ( $video ) : ?>
 								<a class="track__video" href="<?php echo esc_url( $video ); ?>" target="_blank" rel="noopener">Video <span class="pfeil">↗</span></a>
 							<?php else : ?>
