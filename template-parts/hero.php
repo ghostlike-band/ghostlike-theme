@@ -24,6 +24,7 @@ foreach ( $q->posts as $p ) {
 		'alt'      => $thumb ? get_post_meta( $thumb, '_wp_attachment_image_alt', true ) : '',
 		'mobile'   => gl_meta( $p->ID, 'image_mobile' ),
 		'focus'    => gl_meta( $p->ID, 'focus', 'center' ),
+		'focus_m'  => gl_meta( $p->ID, 'focus_mobile', 'center 20%' ),
 		'video'    => gl_meta( $p->ID, 'video' ),
 		'video_m'  => gl_meta( $p->ID, 'video_mobile' ),
 		'kicker'   => gl_meta( $p->ID, 'kicker' ),
@@ -38,7 +39,7 @@ foreach ( $q->posts as $p ) {
 if ( ! $slides ) {
 	$slides[] = array(
 		'thumb' => 0, 'image' => GL_URI . '/assets/img/demo/band-industrial.jpg', 'srcset' => '', 'alt' => get_bloginfo( 'name' ),
-		'mobile' => GL_URI . '/assets/img/demo/band-portrait.jpg', 'focus' => 'center', 'video' => '', 'video_m' => '',
+		'mobile' => GL_URI . '/assets/img/demo/band-portrait.jpg', 'focus' => 'center', 'focus_m' => 'center 20%', 'video' => '', 'video_m' => '',
 		'kicker' => gl_opt( 'tagline' ), 'headline' => get_bloginfo( 'name' ), 'logo' => true, 'subline' => '',
 		'btn' => 'Meet the band', 'url' => '#band', 'label' => 'Band',
 	);
@@ -52,7 +53,7 @@ $total = count( $slides );
 	<div class="slides">
 		<?php foreach ( $slides as $i => $s ) :
 			$first = $i === 0;
-			$style = '--fokus:' . $s['focus'];
+			$style = '--fokus:' . $s['focus'] . ';--fokus-m:' . $s['focus_m'];
 			?>
 			<article class="slide<?php echo $first ? ' is-active' : ''; ?>"<?php echo $s['video'] ? ' data-video' : ''; ?> aria-roledescription="slide" aria-label="<?php echo esc_attr( ( $i + 1 ) . ' of ' . $total ); ?>">
 				<div class="slide__media" style="<?php echo esc_attr( $style ); ?>">

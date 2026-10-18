@@ -317,6 +317,13 @@ body.admin-bar .nav { top: 32px; }
   .tour__venue { grid-column: 1; grid-row: 3; font-size: 14px; }
   .tour__row .btn, .tour__row--aus > .meta:last-child { grid-column: 2; grid-row: 2 / 4; }
 }
+/* Handy: Bild oben, Text darunter – damit die Band nicht hinter dem Text verschwindet */
+@media (max-width: 767px) {
+  .slide { background: var(--schwarz); }
+  .slide__media { bottom: auto; height: 60%; }
+  .slide__media img, .slide__media video { object-position: var(--fokus-m, center 20%); }
+  .slide__media::after { background: linear-gradient(180deg, rgba(10,11,10,.55) 0%, rgba(10,11,10,0) 22%, rgba(10,11,10,0) 62%, var(--schwarz) 100%); }
+}
 @media (max-width: 640px) {
   .hero { min-height: 560px; }
   .slide__content { bottom: 130px; gap: 16px; }
