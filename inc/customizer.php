@@ -43,11 +43,13 @@ add_action( 'customize_register', function ( WP_Customize_Manager $c ) {
 	$add( 'bio_lead', 'gl_band', 'Bio – erster Absatz', 'textarea', 'sanitize_textarea_field' );
 	$add( 'bio_text', 'gl_band', 'Bio – zweiter Absatz', 'textarea', 'sanitize_textarea_field' );
 	$add( 'members', 'gl_band', 'Mitglieder', 'textarea', 'sanitize_textarea_field', 'Eine Zeile pro Person: Name | Instrument' );
-	$add( 'bio_cta_text', 'gl_band', 'Button-Text' );
+	$add( 'bio_cta_text', 'gl_band', 'Button-Text (leer = kein Button)' );
 	$add( 'bio_cta_url', 'gl_band', 'Button-Link', 'text', 'gl_sanitize_link' );
 	$add( 'bio_caption', 'gl_band', 'Bildunterschrift' );
 	$c->add_setting( 'gl_band_image', array( 'sanitize_callback' => 'absint' ) );
-	$c->add_control( new WP_Customize_Media_Control( $c, 'gl_band_image', array( 'label' => 'Bandfoto', 'section' => 'gl_band', 'mime_type' => 'image' ) ) );
+	$c->add_control( new WP_Customize_Media_Control( $c, 'gl_band_image', array( 'label' => 'Bandfoto (Desktop)', 'section' => 'gl_band', 'mime_type' => 'image', 'description' => 'Wird nie zugeschnitten. Ideal: Querformat 2400 × 1350 px, alle Mitglieder gut erkennbar.' ) ) );
+	$c->add_setting( 'gl_band_image_mobile', array( 'sanitize_callback' => 'absint' ) );
+	$c->add_control( new WP_Customize_Media_Control( $c, 'gl_band_image_mobile', array( 'label' => 'Bandfoto (Handy, optional)', 'section' => 'gl_band', 'mime_type' => 'image', 'description' => 'Z. B. ein Hochformat-Foto, auf dem alle fünf groß zu sehen sind (1080 × 1350 px).' ) ) );
 	$add( 'marquee', 'gl_band', 'Laufband-Text', 'text', 'sanitize_text_field', 'Teile mit | trennen.' );
 
 	// Header-Slider

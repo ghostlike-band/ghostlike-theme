@@ -1,6 +1,8 @@
 <?php
 /**
  * Hero-Slider. Slides kommen aus „Hero-Slides“. Ohne Slides: eine Band-Slide mit Logo.
+ * Pro Slide optional eigenes Bild/Video fürs Handy (Hochformat) und ein Bildausschnitt.
+ * Videos laden erst, wenn ihre Slide dran ist (schneller Seitenstart).
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -14,10 +16,16 @@ $q = new WP_Query( array(
 
 $slides = array();
 foreach ( $q->posts as $p ) {
+	$thumb    = get_post_thumbnail_id( $p );
 	$slides[] = array(
-		'image'    => get_the_post_thumbnail_url( $p, 'gl-hero' ) ?: '',
-		'alt'      => get_post_meta( get_post_thumbnail_id( $p ), '_wp_attachment_image_alt', true ),
+		'thumb'    => $thumb,
+		'image'    => $thumb ? wp_get_attachment_image_url( $thumb, 'gl-hero' ) : '',
+		'srcset'   => $thumb ? wp_get_attachment_image_srcset( $thumb, 'gl-hero' ) : '',
+		'alt'      => $thumb ? get_post_meta( $thumb, '_wp_attachment_image_alt', true ) : '',
+		'mobile'   => gl_meta( $p->ID, 'image_mobile' ),
+		'focus'    => gl_meta( $p->ID, 'focus', 'center' ),
 		'video'    => gl_meta( $p->ID, 'video' ),
+		'video_m'  => gl_meta( $p->ID, 'video_mobile' ),
 		'kicker'   => gl_meta( $p->ID, 'kicker' ),
 		'headline' => gl_meta( $p->ID, 'headline', $p->post_title ),
 		'logo'     => gl_meta( $p->ID, 'show_logo' ) === '1',
@@ -29,7 +37,8 @@ foreach ( $q->posts as $p ) {
 }
 if ( ! $slides ) {
 	$slides[] = array(
-		'image' => GL_URI . '/assets/img/demo/band-industrial.jpg', 'alt' => get_bloginfo( 'name' ), 'video' => '',
+		'thumb' => 0, 'image' => GL_URI . '/assets/img/demo/band-industrial.jpg', 'srcset' => '', 'alt' => get_bloginfo( 'name' ),
+		'mobile' => GL_URI . '/assets/img/demo/band-portrait.jpg', 'focus' => 'center', 'video' => '', 'video_m' => '',
 		'kicker' => gl_opt( 'tagline' ), 'headline' => get_bloginfo( 'name' ), 'logo' => true, 'subline' => '',
 		'btn' => 'Meet the band', 'url' => '#band', 'label' => 'Band',
 	);
@@ -39,21 +48,31 @@ $link = function ( $url ) {
 };
 $total = count( $slides );
 ?>
-<section class="hero" id="top" aria-roledescription="carousel" aria-label="Highlights" data-count="<?php echo (int) $total; ?>">
+<section class="hero" id="top" aria-roledescription="carousel" aria-label="Highlights">
 	<div class="slides">
-		<?php foreach ( $slides as $i => $s ) : ?>
-			<article class="slide<?php echo $i === 0 ? ' is-active' : ''; ?>"<?php echo $s['video'] ? ' data-video' : ''; ?> aria-roledescription="slide" aria-label="<?php echo esc_attr( ( $i + 1 ) . ' of ' . $total ); ?>">
-				<div class="slide__media">
+		<?php foreach ( $slides as $i => $s ) :
+			$first = $i === 0;
+			$style = '--fokus:' . $s['focus'];
+			?>
+			<article class="slide<?php echo $first ? ' is-active' : ''; ?>"<?php echo $s['video'] ? ' data-video' : ''; ?> aria-roledescription="slide" aria-label="<?php echo esc_attr( ( $i + 1 ) . ' of ' . $total ); ?>">
+				<div class="slide__media" style="<?php echo esc_attr( $style ); ?>">
 					<?php if ( $s['video'] ) : ?>
-						<video muted loop playsinline preload="<?php echo $i === 0 ? 'auto' : 'metadata'; ?>"<?php echo $s['image'] ? ' poster="' . esc_url( $s['image'] ) . '"' : ''; ?>><source src="<?php echo esc_url( $s['video'] ); ?>" type="video/mp4"></video>
+						<video muted loop playsinline preload="none"
+							data-src="<?php echo esc_url( $s['video'] ); ?>"
+							<?php if ( $s['video_m'] ) : ?>data-src-mobile="<?php echo esc_url( $s['video_m'] ); ?>"<?php endif; ?>
+							<?php if ( $s['image'] ) : ?>poster="<?php echo esc_url( $s['image'] ); ?>"<?php endif; ?>
+							<?php if ( $s['mobile'] ) : ?>data-poster-mobile="<?php echo esc_url( $s['mobile'] ); ?>"<?php endif; ?>></video>
 					<?php elseif ( $s['image'] ) : ?>
-						<img src="<?php echo esc_url( $s['image'] ); ?>" alt="<?php echo esc_attr( $s['alt'] ); ?>"<?php echo $i === 0 ? ' fetchpriority="high"' : ' loading="lazy"'; ?>>
+						<picture>
+							<?php if ( $s['mobile'] ) : ?><source media="(max-width: 767px)" srcset="<?php echo esc_url( $s['mobile'] ); ?>"><?php endif; ?>
+							<img src="<?php echo esc_url( $s['image'] ); ?>"<?php echo $s['srcset'] ? ' srcset="' . esc_attr( $s['srcset'] ) . '" sizes="100vw"' : ''; ?> alt="<?php echo esc_attr( $s['alt'] ); ?>"<?php echo $first ? ' fetchpriority="high"' : ' loading="lazy"'; ?>>
+						</picture>
 					<?php endif; ?>
 				</div>
 				<div class="slide__content">
 					<?php if ( $s['kicker'] ) : ?><span class="meta meta--hell"><?php echo esc_html( $s['kicker'] ); ?></span><?php endif; ?>
 					<?php
-					$tag = $i === 0 ? 'h1' : 'h2';
+					$tag = $first ? 'h1' : 'h2';
 					if ( $s['logo'] ) {
 						echo '<' . $tag . ' class="slide__logo logo"><span class="visually-hidden">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
 						gl_logo();

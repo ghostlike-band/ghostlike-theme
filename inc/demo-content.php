@@ -67,7 +67,26 @@ function gl_p( ...$paras ) {
 	return implode( "\n\n", array_map( fn( $p ) => "<!-- wp:paragraph -->\n<p>{$p}</p>\n<!-- /wp:paragraph -->", $paras ) );
 }
 
+// Offizielle Musikvideos
+const GL_VIDEOS = array(
+	'deep-blue-sea'  => 'https://youtu.be/EakE0ouacgo',
+	'nothings-okay'  => 'https://youtu.be/DqXVOw3MyLE',
+	'the-price-we-pay' => 'https://youtu.be/LRb5R9Nma24',
+);
+
+/** Tracklist der EP in der echten Reihenfolge. */
+function gl_demo_tracks( $cover_dbs = '', $cover_no = '', $cover_tpwp = '' ) {
+	return implode( "\n", array(
+		'Deep Blue Sea | single | ' . GL_VIDEOS['deep-blue-sea'] . ( $cover_dbs ? ' | ' . $cover_dbs : '' ),
+		'Nothing’s Okay | single | ' . GL_VIDEOS['nothings-okay'] . ( $cover_no ? ' | ' . $cover_no : '' ),
+		'The Price We Pay | single | ' . GL_VIDEOS['the-price-we-pay'] . ( $cover_tpwp ? ' | ' . $cover_tpwp : '' ),
+		'Who Am I',
+		'Spiral',
+	) );
+}
+
 function gl_demo_import() {
+	require_once ABSPATH . 'wp-admin/includes/taxonomy.php';
 	// WordPress-Standardinhalte („Hallo Welt!“, „Beispiel-Seite“) in den Papierkorb.
 	foreach ( get_posts( array( 'post_type' => array( 'post', 'page' ), 'post_status' => 'publish', 'posts_per_page' => 10, 'post__in' => array( 1, 2 ) ) ) as $p ) {
 		if ( in_array( $p->post_name, array( 'hello-world', 'hallo-welt', 'sample-page', 'beispiel-seite' ), true ) ) {
@@ -119,8 +138,8 @@ function gl_demo_import() {
 
 	// Hero-Slides
 	$slides = array(
-		array( 'Band', $img['band'], array( 'kicker' => 'Metalcore · Augsburg, DE', 'show_logo' => '1', 'subline' => 'Five-piece metalcore from Augsburg, Germany.', 'button_text' => 'Meet the band', 'button_url' => '#band' ) ),
-		array( 'Video – Nothing’s Okay', $img['hand'], array( 'kicker' => 'Official video · Single 01', 'headline' => "Nothing’s\nokay", 'video' => $url( 'video' ), 'button_text' => 'Watch the video', 'button_url' => $yt ) ),
+		array( 'Band', $img['band'], array( 'image_mobile' => $url( 'portrait' ), 'kicker' => 'Metalcore · Augsburg, DE', 'show_logo' => '1', 'subline' => 'Five-piece metalcore from Augsburg, Germany.', 'button_text' => 'Meet the band', 'button_url' => '#band' ) ),
+		array( 'Video – Nothing’s Okay', $img['hand'], array( 'kicker' => 'Official video', 'headline' => "Nothing’s\nokay", 'video' => $url( 'video' ), 'button_text' => 'Watch the video', 'button_url' => GL_VIDEOS['nothings-okay'] ) ),
 		array( 'EP – The Quiet Collapse', $img['ice'], array( 'kicker' => 'EP · Out now', 'headline' => "The quiet\ncollapse", 'button_text' => 'Listen now', 'button_url' => '#music' ) ),
 		array( 'News – Studio', $img['dome'], array( 'kicker' => 'News · Studio log', 'headline' => "Back in\nthe studio", 'button_text' => 'Read more', 'button_url' => '#news' ) ),
 		array( 'Live 2027', $img['wide'], array( 'kicker' => 'Live · 2027', 'headline' => "Catch us\nlive", 'button_text' => 'Tour dates', 'button_url' => '#tour' ) ),
@@ -130,19 +149,10 @@ function gl_demo_import() {
 	}
 
 	// Release
-	$tracks = implode( "\n", array(
-		'Nothing’s Okay | single | ' . $yt . ' | ' . $url( 'hand' ),
-		'The Price We Pay | single | ' . $yt . ' | ' . $url( 'thorns' ),
-		'Deep Blue Sea | single | ' . $yt . ' | ' . $url( 'ice' ),
-		'Who Am I',
-		'Spiral',
-	) );
 	gl_demo_post( array( 'post_type' => 'gl_release', 'post_title' => 'The Quiet Collapse', 'menu_order' => 1 ), array(
 		'featured' => '1',
-		'kicker'   => 'EP · Era I · 5 songs · Out now',
-		'tracks'   => $tracks,
-		'bandcamp' => 'https://ghostlike.bandcamp.com/track/nothings-okay',
-		'youtube'  => $yt,
+		'kicker'   => 'EP · Era I · 5 songs · 16.01.2026',
+		'tracks'   => gl_demo_tracks( $url( 'ice' ), $url( 'hand' ), $url( 'thorns' ) ),
 	), $img['ep'] );
 
 	// Tourdaten (Platzhalter)
@@ -172,12 +182,12 @@ function gl_demo_import() {
 	), array(), $img['dome'] );
 	gl_demo_post( array(
 		'post_title'   => 'The Quiet Collapse is out now',
-		'post_date'    => '2026-03-20 18:00:00',
+		'post_date'    => '2026-01-16 10:00:00',
 		'post_excerpt' => 'Five songs, one era. Our EP is out on every platform.',
 		'post_category'=> array( wp_create_category( 'Release' ) ),
 		'post_content' => gl_p(
 			'Our EP is out now on every streaming platform.',
-			'Five songs that started Era I: Nothing’s Okay, The Price We Pay, Deep Blue Sea, Who Am I and Spiral. Three of them came out as singles first, each with its own music video.',
+			'Five songs that started Era I: Deep Blue Sea, Nothing’s Okay, The Price We Pay, Who Am I and Spiral. Three of them came out as singles first, each with its own music video.',
 			'Thank you to everyone who listened, shared and came to the shows. This one is yours now.'
 		),
 	), array(), $img['ep'] );
@@ -198,6 +208,7 @@ function gl_demo_import() {
 
 	// Customizer-Bilder
 	set_theme_mod( 'gl_band_image', $img['wall'] );
+	set_theme_mod( 'gl_band_image_mobile', $img['portrait'] );
 	foreach ( array( 'portrait', 'thorns', 'wall2', 'dome', 'ice', 'wide' ) as $i => $k ) {
 		set_theme_mod( 'gl_feed_' . ( $i + 1 ), $img[ $k ] );
 	}
@@ -207,7 +218,8 @@ function gl_demo_import() {
 
 function gl_demo_remove() {
 	$ids = get_posts( array(
-		'post_type'      => 'any',
+		// „any“ würde Slides/Releases/Shows auslassen (exclude_from_search), daher explizit
+		'post_type'      => array( 'post', 'page', 'gl_slide', 'gl_release', 'gl_show' ),
 		'post_status'    => 'any',
 		'posts_per_page' => -1,
 		'fields'         => 'ids',
@@ -227,6 +239,7 @@ function gl_demo_remove() {
 		wp_delete_nav_menu( $menu );
 	}
 	remove_theme_mod( 'gl_band_image' );
+	remove_theme_mod( 'gl_band_image_mobile' );
 	for ( $i = 1; $i <= 6; $i++ ) {
 		remove_theme_mod( 'gl_feed_' . $i );
 	}

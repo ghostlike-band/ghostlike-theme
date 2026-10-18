@@ -17,13 +17,12 @@ usort( $releases, fn( $a, $b ) => (int) ( gl_meta( $b->ID, 'featured' ) === '1' 
 $main  = array_shift( $releases );
 $id    = $main->ID;
 $cover = get_the_post_thumbnail_url( $main, 'gl-square' );
-$links = array_filter( array(
-	'Spotify'       => gl_meta( $id, 'spotify' ),
-	'Apple Music'   => gl_meta( $id, 'apple' ),
-	'Bandcamp'      => gl_meta( $id, 'bandcamp' ),
-	'YouTube'       => gl_meta( $id, 'youtube' ),
-	'All platforms' => gl_meta( $id, 'smartlink' ),
-) );
+$links = array();
+foreach ( gl_platforms() as $key => $pl ) {
+	if ( $url = gl_meta( $id, $key ) ) {
+		$links[] = array( 'url' => $url, 'label' => $pl[0], 'icon' => $pl[1] ? gl_icon( $pl[1] ) : '' );
+	}
+}
 ?>
 <section class="section" id="music">
 	<div class="section__head">
@@ -66,10 +65,16 @@ $links = array_filter( array(
 			<?php endif; ?>
 
 			<?php if ( $links ) : ?>
-				<div class="platforms" data-reveal>
-					<?php $first = true; foreach ( $links as $label => $url ) : ?>
-						<a href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener" class="btn btn--klein<?php echo $first ? ' btn--hell' : ''; ?>"><?php echo esc_html( $label ); ?> <span class="pfeil">↗</span></a>
-					<?php $first = false; endforeach; ?>
+				<div class="stream" data-reveal>
+					<span class="meta">Listen on</span>
+					<div class="stream__list">
+						<?php foreach ( $links as $l ) : ?>
+							<a href="<?php echo esc_url( $l['url'] ); ?>" target="_blank" rel="noopener" class="stream__btn">
+								<?php echo $l['icon'] ? $l['icon'] : '<span class="stream__pfeil" aria-hidden="true">↗</span>'; // phpcs:ignore -- lokale SVG-Datei ?>
+								<span><?php echo esc_html( $l['label'] ); ?></span>
+							</a>
+						<?php endforeach; ?>
+					</div>
 				</div>
 			<?php endif; ?>
 		</div>

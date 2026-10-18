@@ -17,12 +17,30 @@
     let cur = 0, t0 = performance.now(), elapsed = 0, paused = reduced, hover = false, visible = true;
     hero.style.setProperty('--dauer', DAUER / 1000 + 's');
 
+    // Handy: eigenes Hochformat-Video/-Vorschaubild, falls hinterlegt. Videos laden erst bei Bedarf.
+    const mobileQ = matchMedia('(max-width: 767px)');
+    const ensureSrc = (v) => {
+      const want = (mobileQ.matches && v.dataset.srcMobile) || v.dataset.src;
+      if (want && v.dataset.loaded !== want) { v.src = want; v.dataset.loaded = want; }
+    };
+    const setPosters = () => $$('video', hero).forEach((v) => {
+      if (!v.dataset.posterDesktop) v.dataset.posterDesktop = v.getAttribute('poster') || '';
+      const p = (mobileQ.matches && v.dataset.posterMobile) || v.dataset.posterDesktop;
+      if (p) v.poster = p;
+    });
+    setPosters();
     const playVideo = (slide) => {
       const v = $('video', slide);
       if (!v) return;
+      ensureSrc(v);
       try { v.currentTime = 0; } catch (e) {}
       const p = v.play(); if (p) p.catch(() => {});
     };
+    const prefetchNext = () => {
+      const nv = slides.length > 1 && $('video', slides[(cur + 1) % slides.length]);
+      if (nv) { nv.preload = 'auto'; ensureSrc(nv); }
+    };
+    mobileQ.addEventListener && mobileQ.addEventListener('change', () => { setPosters(); playVideo(slides[cur]); });
 
     function go(i) {
       if (slides.length < 2) return;
@@ -32,6 +50,7 @@
       dots.forEach((d, n) => { d.setAttribute('aria-selected', n === cur); d.style.setProperty('--p', n < cur ? 1 : 0); });
       const pv = $('video', prev); if (pv && prev !== slides[cur]) pv.pause();
       playVideo(slides[cur]);
+      prefetchNext();
       elapsed = 0; t0 = performance.now();
     }
     function tick(now) {
@@ -44,6 +63,8 @@
     }
 
     playVideo(slides[0]);
+    // Nächstes Video erst holen, wenn die Seite fertig geladen ist
+    addEventListener('load', () => setTimeout(prefetchNext, 1500));
     if (slides.length > 1) {
       dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
       $$('.arrow[data-dir]', hero).forEach((b) => b.addEventListener('click', () => go(cur + +b.dataset.dir)));

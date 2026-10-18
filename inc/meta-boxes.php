@@ -14,7 +14,10 @@ function gl_fields() {
 				'headline'    => array( 'label' => 'Headline', 'type' => 'textarea', 'rows' => 2, 'help' => 'Zeilenumbruch = neue Zeile. Maximal zwei Wörter pro Zeile (CI).' ),
 				'show_logo'   => array( 'label' => 'Statt Headline das Logo zeigen', 'type' => 'checkbox' ),
 				'subline'     => array( 'label' => 'Unterzeile', 'type' => 'text' ),
-				'video'       => array( 'label' => 'Video (MP4, optional)', 'type' => 'media', 'help' => 'Kurzer, stummer Loop (10–20 s, max. ca. 8 MB). Ohne Video wird das Beitragsbild gezeigt. Das Beitragsbild ist auch das Vorschaubild.' ),
+				'image_mobile'=> array( 'label' => 'Bild fürs Handy (Hochformat, optional)', 'type' => 'media', 'library' => 'image', 'help' => 'Ideal 1080 × 1920 px (9:16), JPG/WebP, unter 300 KB. Leer = das Beitragsbild wird zugeschnitten.' ),
+				'focus'       => array( 'label' => 'Bildausschnitt', 'type' => 'select', 'options' => array( 'center' => 'Mitte', 'top' => 'Oben', 'bottom' => 'Unten', 'left' => 'Links', 'right' => 'Rechts', '30% center' => 'Etwas links', '70% center' => 'Etwas rechts' ), 'help' => 'Welcher Teil bleibt sichtbar, wenn das Bild zugeschnitten wird (vor allem auf dem Handy).' ),
+				'video'       => array( 'label' => 'Video (MP4, optional)', 'type' => 'media', 'library' => 'video', 'help' => 'Stummer Loop, 10–20 s, 1920 × 1080 oder 1280 × 720, H.264-MP4, unter 8 MB. Mediathek oder externe URL (z. B. bunny.net: …/play_720p.mp4). Das Beitragsbild ist das Vorschaubild.' ),
+				'video_mobile'=> array( 'label' => 'Video fürs Handy (Hochformat, optional)', 'type' => 'media', 'library' => 'video', 'help' => '720 × 1280 (9:16), unter 5 MB. Leer = das Desktop-Video wird zugeschnitten.' ),
 				'button_text' => array( 'label' => 'Button-Text', 'type' => 'text', 'help' => 'z. B. „Watch the video“' ),
 				'button_url'  => array( 'label' => 'Button-Link', 'type' => 'url', 'help' => 'Externer Link oder Anker wie #music, #news, #tour' ),
 			),
@@ -28,9 +31,13 @@ function gl_fields() {
 				'tracks'      => array( 'label' => 'Tracklist', 'type' => 'textarea', 'rows' => 7, 'help' => 'Eine Zeile pro Song: <code>Titel | single | Video-Link | Cover-URL</code>. Nur der Titel ist Pflicht, z. B. <code>Spiral</code> oder <code>Deep Blue Sea | single | https://youtu.be/…</code>' ),
 				'spotify'     => array( 'label' => 'Spotify', 'type' => 'url' ),
 				'apple'       => array( 'label' => 'Apple Music', 'type' => 'url' ),
+				'tidal'       => array( 'label' => 'TIDAL', 'type' => 'url' ),
+				'deezer'      => array( 'label' => 'Deezer', 'type' => 'url' ),
+				'ytmusic'     => array( 'label' => 'YouTube Music', 'type' => 'url' ),
+				'amazon'      => array( 'label' => 'Amazon Music', 'type' => 'url' ),
 				'bandcamp'    => array( 'label' => 'Bandcamp', 'type' => 'url' ),
-				'youtube'     => array( 'label' => 'YouTube', 'type' => 'url' ),
-				'smartlink'   => array( 'label' => 'Alle Plattformen (Smartlink)', 'type' => 'url' ),
+				'youtube'     => array( 'label' => 'YouTube (Videos)', 'type' => 'url', 'help' => 'Wird nicht als Streaming-Button gezeigt, nur als Fallback-Link in der Diskografie.' ),
+				'smartlink'   => array( 'label' => 'Alle Plattformen (Smartlink)', 'type' => 'url', 'help' => 'Buttons erscheinen nur für ausgefüllte Dienste.' ),
 			),
 		),
 		'gl_show'    => array(
@@ -77,7 +84,7 @@ function gl_render_box( $post, $args ) {
 				echo '</select>';
 				break;
 			case 'media':
-				printf( '<input type="url" class="regular-text" id="%s" name="%s" value="%s"> <button type="button" class="button gl-media" data-target="%s">Aus Mediathek wählen</button>', esc_attr( $id ), esc_attr( $name ), esc_attr( $value ), esc_attr( $id ) );
+				printf( '<input type="url" class="regular-text" id="%s" name="%s" value="%s"> <button type="button" class="button gl-media" data-target="%s" data-library="%s">Aus Mediathek wählen</button>', esc_attr( $id ), esc_attr( $name ), esc_attr( $value ), esc_attr( $id ), esc_attr( $f['library'] ?? 'video' ) );
 				break;
 			case 'date':
 				printf( '<input type="date" id="%s" name="%s" value="%s">', esc_attr( $id ), esc_attr( $name ), esc_attr( $value ) );
@@ -149,7 +156,8 @@ add_action( 'admin_enqueue_scripts', function ( $hook ) {
 		document.addEventListener('click', function (e) {
 			var b = e.target.closest('.gl-media'); if (!b) return;
 			e.preventDefault();
-			var frame = wp.media({ title: 'Video wählen', library: { type: 'video' }, button: { text: 'Übernehmen' }, multiple: false });
+			var type = b.dataset.library || 'video';
+			var frame = wp.media({ title: type === 'image' ? 'Bild wählen' : 'Video wählen', library: { type: type }, button: { text: 'Übernehmen' }, multiple: false });
 			frame.on('select', function () {
 				document.getElementById(b.dataset.target).value = frame.state().get('selection').first().toJSON().url;
 			});

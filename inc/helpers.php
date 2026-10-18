@@ -21,8 +21,8 @@ function gl_defaults() {
 		'bio_lead'        => 'GHOSTLIKE is a five-piece metalcore band from Augsburg, Germany. Cold and weathered rather than neon: crushing grooves, screams and clean vocals that stick.',
 		'bio_text'        => 'Our EP The Quiet Collapse opened Era I: five songs, three singles, a music video for each of them. We write, record, mix and film most of it ourselves. Right now we are back in the studio.',
 		'members'         => "Robin | Vocals\nAlexander | Bass\nValentin | Drums\nAndreas | Guitar\nSilvan | Guitar",
-		'bio_cta_text'    => 'Press kit',
-		'bio_cta_url'     => '#contact',
+		'bio_cta_text'    => '',
+		'bio_cta_url'     => '',
 		'bio_caption'     => 'Augsburg, DE — Era I',
 		'marquee'         => 'The Quiet Collapse | Out now | Back in the studio',
 		'slider_interval' => 7,
@@ -124,4 +124,30 @@ function gl_socials() {
 		}
 	}
 	return $out;
+}
+
+/** Logo eines Streamingdienstes (Simple Icons, CC0) als Inline-SVG. */
+function gl_icon( $name ) {
+	static $cache = array();
+	if ( ! isset( $cache[ $name ] ) ) {
+		$file           = GL_DIR . '/assets/img/icons/' . sanitize_file_name( $name ) . '.svg';
+		$svg            = file_exists( $file ) ? (string) file_get_contents( $file ) : '';
+		$svg            = preg_replace( '#<title>.*?</title>#s', '', $svg );
+		$cache[ $name ] = $svg ? str_replace( '<svg ', '<svg aria-hidden="true" focusable="false" fill="currentColor" ', $svg ) : '';
+	}
+	return $cache[ $name ];
+}
+
+/** Streamingdienste in Anzeige-Reihenfolge: Meta-Schlüssel => [Name, Icon]. */
+function gl_platforms() {
+	return array(
+		'spotify'   => array( 'Spotify', 'spotify' ),
+		'apple'     => array( 'Apple Music', 'applemusic' ),
+		'tidal'     => array( 'TIDAL', 'tidal' ),
+		'deezer'    => array( 'Deezer', 'deezer' ),
+		'ytmusic'   => array( 'YouTube Music', 'youtubemusic' ),
+		'amazon'    => array( 'Amazon Music', '' ),
+		'bandcamp'  => array( 'Bandcamp', 'bandcamp' ),
+		'smartlink' => array( 'All platforms', '' ),
+	);
 }

@@ -22,6 +22,8 @@ require GL_DIR . '/inc/contact.php';
 require GL_DIR . '/inc/updater.php';
 require GL_DIR . '/inc/admin-page.php';
 require GL_DIR . '/inc/demo-content.php';
+require GL_DIR . '/inc/sections.php';
+require GL_DIR . '/inc/upgrade.php';
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );

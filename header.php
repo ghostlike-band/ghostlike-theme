@@ -12,13 +12,6 @@
 <?php gl_svg_sprite(); ?>
 
 <?php
-$nav = array(
-	'band'    => 'Band',
-	'music'   => 'Music',
-	'news'    => 'News',
-	'tour'    => 'Tour',
-	'contact' => 'Contact',
-);
 $items = array();
 if ( has_nav_menu( 'main' ) ) {
 	$locations = get_nav_menu_locations();
@@ -28,10 +21,14 @@ if ( has_nav_menu( 'main' ) ) {
 		}
 	}
 } else {
-	foreach ( $nav as $id => $label ) {
-		$items[] = array( 'url' => gl_anchor( $id ), 'label' => $label );
+	// Menü aus den Sektionen (Customizer → GHOSTLIKE → Sektionen & Menü)
+	foreach ( gl_sections() as $s ) {
+		if ( $s['on'] && $s['menu'] && $s['label'] !== '' ) {
+			$items[] = array( 'url' => gl_anchor( $s['id'] ), 'label' => $s['label'] );
+		}
 	}
 }
+$music_on = (bool) array_filter( gl_sections(), fn( $s ) => $s['id'] === 'music' && $s['on'] );
 ?>
 <header class="nav<?php echo is_front_page() ? '' : ' is-solid'; ?>" id="nav">
 	<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="nav__mark logo" aria-label="<?php bloginfo( 'name' ); ?> — Home"><?php gl_mark(); ?></a>
@@ -41,7 +38,7 @@ if ( has_nav_menu( 'main' ) ) {
 		<?php endforeach; ?>
 	</nav>
 	<div class="nav__cta">
-		<a href="<?php echo esc_url( gl_anchor( 'music' ) ); ?>" class="btn btn--patina btn--klein">Listen <span class="pfeil">↗</span></a>
+		<?php if ( $music_on ) : ?><a href="<?php echo esc_url( gl_anchor( 'music' ) ); ?>" class="btn btn--patina btn--klein">Listen <span class="pfeil">↗</span></a><?php endif; ?>
 		<button class="nav__burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
 	</div>
 </header>
