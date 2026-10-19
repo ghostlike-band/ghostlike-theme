@@ -30,6 +30,15 @@ function gl_email_defs() {
 			'subject' => '{von} lädt dich ins {band} Member-Portal ein',
 			'body'    => "# Servus, {vorname}\n\n{von} hat dich ins {band} Member-Portal eingeladen. Dort findest du Proben und Termine, das Studio-Tool mit unserem Aufnahmestand und alles, was wir als Band planen.\n\n[[Passwort festlegen & loslegen|{link}]]\n\nDein Benutzername: **{benutzername}** (oder deine E-Mail-Adresse). Der Link ist bis {gueltig_bis} gültig und funktioniert einmal.",
 		),
+		'portal_version'   => array(
+			'label'   => 'Neue Song-Version (Portal)',
+			'desc'    => 'Geht an die anderen Bandmitglieder, wenn im Studio eine neue Version hochgeladen wird. Abschalten kann man das unter Mein Profil.',
+			'active'  => function_exists( 'glp_portal_url' ),
+			'vars'    => array( 'vorname' => 'Vorname', 'von' => 'Wer hochgeladen hat', 'song' => 'Songtitel', 'version' => 'Version (v3)', 'notiz' => 'Notiz zur Version', 'link' => 'Link zum Song im Portal', 'profil' => 'Link zu Mein Profil' ) + $common,
+			'sample'  => array( 'vorname' => 'Robin', 'von' => 'Alexander', 'song' => 'Mikrofilet', 'version' => 'v3', 'notiz' => 'Rough Mix, neue Vocals', 'link' => home_url( '/portal/?song=7#studio' ), 'profil' => home_url( '/portal/#profil' ) ),
+			'subject' => 'Neu: {song} {version} von {von}',
+			'body'    => "# {song} {version}\n\nServus {vorname}, {von} hat eine neue Version hochgeladen.\n\nNotiz: **{notiz}**\n\n[[Jetzt anhören|{link}]]\n\n---\n\nKeine Mails mehr zu neuen Versionen? Unter Mein Profil abschalten: {profil}",
+		),
 		'contact'          => array(
 			'label'   => 'Kontaktformular (an euch)',
 			'desc'    => 'Geht an die Empfänger aus Customizer → GHOSTLIKE → Kontakt. „Antworten“ geht direkt an die Person.',
