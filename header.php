@@ -28,6 +28,8 @@ if ( has_nav_menu( 'main' ) ) {
 		}
 	}
 }
+$member_on    = (bool) get_theme_mod( 'gl_member_login_header', 1 ) && gl_opt( 'member_login_url' );
+$member_label = is_user_logged_in() && current_user_can( 'gl_portal' ) ? 'Portal' : 'Members';
 $music_on = (bool) array_filter( gl_sections(), fn( $s ) => $s['id'] === 'music' && $s['on'] );
 ?>
 <header class="nav<?php echo is_front_page() ? '' : ' is-solid'; ?>" id="nav">
@@ -39,6 +41,12 @@ $music_on = (bool) array_filter( gl_sections(), fn( $s ) => $s['id'] === 'music'
 	</nav>
 	<div class="nav__cta">
 		<?php if ( $music_on ) : ?><a href="<?php echo esc_url( gl_anchor( 'music' ) ); ?>" class="btn btn--patina btn--klein">Listen <span class="pfeil">↗</span></a><?php endif; ?>
+		<?php if ( $member_on ) : ?>
+			<a href="<?php echo esc_url( gl_opt( 'member_login_url' ) ); ?>" class="nav__member" aria-label="Member login" rel="nofollow">
+				<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="4" y="10" width="16" height="11" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 14v3" stroke="currentColor" stroke-width="2"/></svg>
+				<span><?php echo esc_html( $member_label ); ?></span>
+			</a>
+		<?php endif; ?>
 		<button class="nav__burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
 	</div>
 </header>
