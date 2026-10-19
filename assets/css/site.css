@@ -127,7 +127,7 @@
 .single:hover .single__play { background: var(--akzent); transform: scale(1.08); }
 
 /* ---------- BLOG ---------- */
-.blog { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; align-items: stretch; }
+.news-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; align-items: stretch; }
 .post { display: grid; background: var(--schwarz); border: 1px solid var(--linie); color: inherit; text-align: left; cursor: pointer; padding: 22px; display: grid; gap: 10px; align-content: start; transition: border-color .3s, transform .4s var(--ease); font: inherit; }
 .post:hover { border-color: var(--akzent); transform: translateY(-3px); }
 .post__meta { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
@@ -140,7 +140,7 @@
 .post--gross:hover .post__img img { transform: scale(1.04); }
 .post__body { padding: 26px; display: grid; gap: 14px; align-content: start; }
 .post--gross .display-m { font-size: clamp(22px, 2.2vw, 32px); }
-.blog__list { display: grid; gap: 16px; grid-auto-rows: 1fr; }
+.news-grid__list { display: grid; gap: 16px; grid-auto-rows: 1fr; }
 .studio-meter { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; padding: 14px 0; border-block: 1px solid var(--linie); }
 .studio-meter__bar { height: 8px; border: 1px solid var(--linie-stark); }
 .studio-meter__bar i { display: block; height: 100%; width: 0; background: var(--akzent); transition: width 1.8s var(--ease); }
@@ -205,6 +205,27 @@
 .feed a:hover img { transform: scale(1.06); filter: none; }
 .feed a:hover span { opacity: 1; transform: none; }
 
+/* Instagram-Feed von Smash Balloon im Website-Raster (überschreibt dessen Layout) */
+.feed--insta { display: block; }
+.feed--insta #sb_instagram { padding: 0 !important; width: 100% !important; max-width: none !important; background: transparent !important; }
+.feed--insta #sb_instagram .sb_instagram_header,
+.feed--insta #sb_instagram #sbi_load,
+.feed--insta #sb_instagram .sbi_load_btn,
+.feed--insta #sb_instagram .sbi_follow_btn,
+.feed--insta #sb_instagram .sbi-screenreader { display: none !important; }
+.feed--insta #sbi_images { display: grid !important; grid-template-columns: repeat(6, 1fr) !important; gap: 8px !important; padding: 0 !important; margin: 0 !important; width: 100% !important; float: none !important; }
+.feed--insta #sbi_images .sbi_item { width: auto !important; padding: 0 !important; margin: 0 !important; float: none !important; display: block !important; opacity: 1 !important; }
+.feed--insta #sbi_images .sbi_item:nth-child(n+7) { display: none !important; }
+.feed--insta .sbi_photo_wrap { position: relative; overflow: hidden; border-radius: 0 !important; }
+.feed--insta .sbi_photo { display: block !important; position: relative; aspect-ratio: 4 / 5; height: auto !important; overflow: hidden; border-radius: 0 !important; background-size: cover !important; background-position: center !important; filter: grayscale(.6); transition: transform .8s var(--ease), filter .5s; }
+.feed--insta .sbi_photo img { position: absolute; inset: 0; width: 100% !important; height: 100% !important; object-fit: cover; opacity: 1 !important; display: block !important; border-radius: 0 !important; }
+.feed--insta .sbi_photo_wrap::after { content: "Instagram ↗"; position: absolute; left: 10px; bottom: 10px; font-family: var(--f-mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--kalk); opacity: 0; transform: translateY(6px); transition: .35s var(--ease); pointer-events: none; text-shadow: 0 1px 8px rgba(10,11,10,.8); }
+.feed--insta .sbi_photo_wrap:hover .sbi_photo { transform: scale(1.06); filter: none; }
+.feed--insta .sbi_photo_wrap:hover::after { opacity: 1; transform: none; }
+.feed--insta .sbi_playbtn, .feed--insta .sbi_carousel { color: var(--kalkweiss) !important; fill: var(--kalkweiss) !important; z-index: 1; }
+.feed--insta .sbi_photo_wrap .sbi_playbtn { opacity: .85; }
+.feed--insta #sb_instagram #sbi_mod_error, .feed--insta #sb_instagram .sb_instagram_error { font-family: var(--f-mono); font-size: 13px; color: var(--kalk); background: var(--schwarz); border: 1px dashed var(--flechte); padding: 14px; border-radius: 0; }
+
 /* ---------- KONTAKT ---------- */
 .kontakt { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(32px, 6vw, 96px); }
 .kontakt__intro { display: grid; gap: 24px; align-content: start; }
@@ -254,7 +275,7 @@
 body.admin-bar .nav { top: 32px; }
 @media (max-width: 782px) { body.admin-bar .nav { top: 46px; } }
 .skip-link:focus { position: fixed !important; left: 16px; top: 16px; width: auto; height: auto; clip: auto; z-index: 100; background: var(--kalkweiss); color: var(--schwarz); padding: 10px 14px; }
-.blog--einzeln { grid-template-columns: 1fr; }
+.news-grid--einzeln { grid-template-columns: 1fr; }
 .tour__leer { margin: 0; max-width: 52ch; color: var(--kalk); font-size: 18px; }
 .disco { margin-top: clamp(56px, 7vw, 96px); display: grid; gap: 16px; }
 .disco__list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--linie); }
@@ -305,12 +326,13 @@ body.admin-bar .nav { top: 32px; }
   .nav__links { display: none; }
   .nav__burger { display: inline-flex; }
   .release, .kontakt, .band__grid { grid-template-columns: 1fr; }
-  .blog { grid-template-columns: 1fr; }
-  .blog__list { grid-auto-rows: auto; }
+  .news-grid { grid-template-columns: 1fr; }
+  .news-grid__list { grid-auto-rows: auto; }
   .disco__list li { grid-template-columns: 48px 1fr auto; }
   .disco__list li .meta { display: none; }
   .disco__list img { width: 48px; height: 48px; }
   .feed { grid-template-columns: repeat(3, 1fr); }
+  .feed--insta #sbi_images { grid-template-columns: repeat(3, 1fr) !important; }
   .tour__row { grid-template-columns: 1fr auto; gap: 4px 16px; }
   .tour__row > .meta:first-child { grid-column: 1 / -1; }
   .tour__row .display-m { grid-column: 1; }
@@ -341,6 +363,7 @@ body.admin-bar .nav { top: 32px; }
   .studio-meter { grid-template-columns: 1fr auto; }
   .studio-meter__bar { grid-column: 1 / -1; grid-row: 2; }
   .feed { grid-template-columns: repeat(2, 1fr); }
+  .feed--insta #sbi_images { grid-template-columns: repeat(2, 1fr) !important; }
   .footer__grid { grid-template-columns: 1fr 1fr; }
   .btn { padding: 12px 16px; }
   /* Pfeile in Buttons nur am Desktop */

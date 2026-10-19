@@ -25,7 +25,7 @@ $cat     = function ( $p ) {
 		<?php if ( $all_url ) : ?><a href="<?php echo esc_url( $all_url ); ?>" class="meta meta--hell unterstrichen" data-reveal>All posts ↗</a><?php endif; ?>
 	</div>
 
-	<div class="blog<?php echo $posts ? '' : ' blog--einzeln'; ?>">
+	<div class="news-grid<?php echo $posts ? '' : ' news-grid--einzeln'; ?>">
 		<a class="post post--gross" href="<?php echo esc_url( get_permalink( $first ) ); ?>" data-reveal>
 			<?php if ( has_post_thumbnail( $first ) ) : ?>
 				<div class="post__img"><img src="<?php echo esc_url( get_the_post_thumbnail_url( $first, 'gl-card' ) ); ?>" alt="" loading="lazy"></div>
@@ -39,7 +39,7 @@ $cat     = function ( $p ) {
 		</a>
 
 		<?php if ( $posts ) : ?>
-			<div class="blog__list" data-stagger>
+			<div class="news-grid__list" data-stagger>
 				<?php foreach ( $posts as $p ) : ?>
 					<a class="post" href="<?php echo esc_url( get_permalink( $p ) ); ?>">
 						<span class="post__meta"><span class="tag-s"><?php echo esc_html( $cat( $p ) ); ?></span><span class="meta"><?php echo esc_html( get_the_date( 'd.m.Y', $p ) ); ?></span></span>

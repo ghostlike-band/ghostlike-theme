@@ -14,7 +14,7 @@ add_action( 'customize_register', function ( WP_Customize_Manager $c ) {
 		'gl_band'    => 'Band & Bio',
 		'gl_hero'    => 'Header-Slider',
 		'gl_social'  => 'Social & Streaming',
-		'gl_feed'    => 'Social-Bilder',
+		'gl_feed'    => 'Social / Instagram',
 		'gl_contact' => 'Kontakt',
 		'gl_footer'  => 'Footer & Login',
 	);
@@ -61,7 +61,13 @@ add_action( 'customize_register', function ( WP_Customize_Manager $c ) {
 	}
 	$add( 'instagram_handle', 'gl_social', 'Instagram-Name (ohne @)' );
 
-	// Social-Bilder (bis die Instagram-Anbindung kommt)
+	// Instagram-Feed (Smash Balloon)
+	$c->add_setting( 'gl_feed_source', array( 'default' => 'auto', 'sanitize_callback' => fn( $v ) => in_array( $v, array( 'auto', 'images' ), true ) ? $v : 'auto' ) );
+	$c->add_control( 'gl_feed_source', array( 'label' => 'Was zeigen?', 'section' => 'gl_feed', 'type' => 'radio', 'choices' => array( 'auto' => 'Instagram-Feed (Smash Balloon), falls installiert', 'images' => 'Eigene Bilder (unten)' ) ) );
+	$c->add_setting( 'gl_feed_id', array( 'default' => 1, 'sanitize_callback' => 'absint' ) );
+	$c->add_control( 'gl_feed_id', array( 'label' => 'Smash-Balloon-Feed-ID', 'section' => 'gl_feed', 'type' => 'number', 'description' => 'Steht in Instagram Feed → All Feeds im Shortcode, z. B. [instagram-feed feed=1] → 1. Das Raster und der Look kommen vom Theme.' ) );
+
+	// Social-Bilder (Ersatz, wenn kein Feed)
 	for ( $i = 1; $i <= 6; $i++ ) {
 		$c->add_setting( 'gl_feed_' . $i, array( 'sanitize_callback' => 'absint' ) );
 		$c->add_control( new WP_Customize_Media_Control( $c, 'gl_feed_' . $i, array( 'label' => 'Bild ' . $i, 'section' => 'gl_feed', 'mime_type' => 'image' ) ) );
