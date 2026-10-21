@@ -139,7 +139,7 @@
     const y = scrollY;
     if (nav) {
       if (!solidAlways) nav.classList.toggle('is-solid', y > innerHeight * 0.6);
-      nav.classList.toggle('is-hidden', y > lastY && y > innerHeight && !(menu && menu.classList.contains('is-open')));
+      // Menü bleibt beim Scrollen immer oben sichtbar (kein Ausblenden mehr)
     }
     lastY = y;
     if (!reduced) parallax();
