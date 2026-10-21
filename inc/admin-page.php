@@ -90,7 +90,7 @@ function gl_admin_page() {
 			<li><strong>Texte und Absender aller E-Mails:</strong> <a href="<?php echo esc_url( admin_url( 'admin.php?page=ghostlike-emails' ) ); ?>">GHOSTLIKE → E-Mails</a>.</li>
 			<li><strong>Alle Updates mit einem Klick:</strong> <a href="<?php echo esc_url( admin_url( 'admin.php?page=ghostlike-updates' ) ); ?>">GHOSTLIKE → Updates</a>.</li>
 			<li><strong>Videos zu bunny.net hochladen und als Header-Video eintragen:</strong> <a href="<?php echo esc_url( admin_url( 'admin.php?page=ghostlike-videos' ) ); ?>">GHOSTLIKE → Videos</a>.</li>
-			<li><strong>Sektionen ein/aus, Reihenfolge, Menü:</strong> <a href="<?php echo esc_url( admin_url( 'customize.php?autofocus[section]=gl_sections' ) ); ?>">Customizer → GHOSTLIKE → Sektionen &amp; Menü</a>.</li>
+			<li><strong>Sektionen ein/aus, Reihenfolge, Menü:</strong> <a href="<?php echo esc_url( admin_url( 'admin.php?page=ghostlike-startseite' ) ); ?>">GHOSTLIKE → Startseite</a>.</li>
 			<li><strong>Header-Slider:</strong> links im Menü „Hero-Slides“. Reihenfolge über „Reihenfolge“ (Seiten-Attribute). Pro Slide optional eigenes Bild/Video fürs Handy.</li>
 			<li><strong>Ideale Größen Header:</strong> Bild 2400 × 1350 px (Handy 1080 × 1920), unter 400 KB · Video 1920 × 1080 oder 1280 × 720, H.264-MP4, 10–20 s, ohne Ton, unter 8 MB (Handy 720 × 1280, unter 5 MB).</li>
 			<li><strong>Releases:</strong> „Releases“. Das Release mit Haken „Groß auf der Startseite“ steht oben.</li>
