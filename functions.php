@@ -66,9 +66,18 @@ add_action( 'wp_enqueue_scripts', function () {
 
 // Favicon aus dem Theme, solange kein Website-Icon gesetzt ist.
 add_action( 'wp_head', function () {
+	$app = GL_URI . '/assets/img/app/';
 	if ( ! has_site_icon() ) {
 		echo '<link rel="icon" href="' . esc_url( GL_URI . '/assets/img/favicon.svg' ) . '" type="image/svg+xml">' . "\n";
+		echo '<link rel="icon" href="' . esc_url( $app . 'favicon-32.png' ) . '" sizes="32x32" type="image/png">' . "\n";
+		echo '<link rel="apple-touch-icon" href="' . esc_url( $app . 'apple-touch-icon.png' ) . '">' . "\n"; // iPhone: „Zum Home-Bildschirm“
 	}
+	// Als Web-App vom Home-Bildschirm: eigenes Fenster, Name und Icon
+	echo '<link rel="manifest" href="' . esc_url( $app . 'site.webmanifest' ) . '">' . "\n";
+	echo '<meta name="apple-mobile-web-app-title" content="GHOSTLIKE">' . "\n";
+	echo '<meta name="apple-mobile-web-app-capable" content="yes">' . "\n";
+	echo '<meta name="mobile-web-app-capable" content="yes">' . "\n";
+	echo '<meta name="apple-mobile-web-app-status-bar-style" content="black">' . "\n";
 	echo '<meta name="theme-color" content="#0A0B0A">' . "\n";
 } );
 
