@@ -196,3 +196,18 @@
 
   onScroll();
 })();
+
+/* YouTube erst nach Klick laden (Datenschutz) */
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('.yt-consent__play');
+  if (!b) return;
+  const box = b.closest('.yt-consent');
+  const f = document.createElement('iframe');
+  f.src = box.dataset.yt;
+  f.title = box.dataset.title || 'YouTube video';
+  f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+  f.allowFullscreen = true;
+  f.referrerPolicy = 'strict-origin-when-cross-origin';
+  box.replaceChildren(f);
+  box.classList.add('is-on');
+});

@@ -430,3 +430,13 @@ body.admin-bar .nav { top: 32px; }
 /* For fans of */
 .fans-of { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; margin: 0; }
 .fans-of__list { font-family: var(--f-display); font-stretch: 112%; font-weight: 700; font-size: 14px; text-transform: uppercase; color: var(--kalkweiss); letter-spacing: .02em; }
+
+/* YouTube nach Klick */
+.yt-consent { position: absolute; inset: 0; display: grid; place-items: center; background: var(--schwarz); overflow: hidden; }
+.yt-consent img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .7; transition: opacity .4s var(--ease); }
+.yt-consent:hover img { opacity: .9; }
+.yt-consent__play { position: relative; width: 84px; height: 84px; border: 0; background: var(--akzent); color: var(--schwarz); font-size: 26px; cursor: pointer; transition: transform .3s var(--ease), background .3s; }
+.yt-consent__play:hover, .yt-consent__play:focus-visible { transform: scale(1.08); background: var(--kalkweiss); }
+.yt-consent__note { position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 14px; font-family: var(--f-mono); font-size: 11px; letter-spacing: .04em; color: var(--kalk); background: linear-gradient(to top, rgba(10, 11, 10, .9), transparent); }
+.yt-consent__note a { color: var(--kalkweiss); }
+.yt-consent iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }

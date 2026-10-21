@@ -42,3 +42,24 @@ add_shortcode( 'press_image', function ( $atts ) {
 	return '<figure class="wp-block-image ' . esc_attr( $a['class'] ) . '"><img src="' . esc_url( $src ) . '" alt="' . esc_attr( $a['alt'] ) . '" loading="lazy">'
 		. ( $a['caption'] !== '' ? '<figcaption class="wp-element-caption">' . esc_html( $a['caption'] ) . '</figcaption>' : '' ) . '</figure>';
 } );
+
+/**
+ * YouTube-Videos in Beiträgen erst nach Klick laden (Datenschutz):
+ * Vorschaubild + Play-Button, beim Klick wird das Video von youtube-nocookie.com geladen.
+ */
+add_filter( 'embed_oembed_html', function ( $html, $url ) {
+	if ( is_admin() || ! preg_match( '~(?:youtu\.be/|youtube\.com/(?:watch\?(?:.*&)?v=|embed/|shorts/))([\w-]{11})~', (string) $url, $m ) ) {
+		return $html;
+	}
+	$id     = $m[1];
+	$title  = preg_match( '/title="([^"]*)"/', (string) $html, $t ) ? html_entity_decode( $t[1] ) : 'Video';
+	$local  = array( 'DqXVOw3MyLE' => 'video-nothings-okay.jpg', 'EakE0ouacgo' => 'video-deep-blue-sea.jpg', 'LRb5R9Nma24' => 'video-the-price-we-pay.jpg' );
+	$poster = isset( $local[ $id ] ) ? GL_URI . '/assets/img/press/' . $local[ $id ] : ( has_post_thumbnail() ? get_the_post_thumbnail_url( null, 'gl-card' ) : '' );
+	$src    = 'https://www.youtube-nocookie.com/embed/' . $id . '?autoplay=1&rel=0';
+	$priv   = get_privacy_policy_url();
+	return '<div class="yt-consent" data-yt="' . esc_url( $src ) . '" data-title="' . esc_attr( $title ) . '">'
+		. ( $poster ? '<img src="' . esc_url( $poster ) . '" alt="" loading="lazy">' : '' )
+		. '<button type="button" class="yt-consent__play" aria-label="' . esc_attr( 'Play video: ' . $title ) . '"><span aria-hidden="true">▶</span></button>'
+		. '<span class="yt-consent__note">Plays via YouTube (Google). By clicking you agree to load it.' . ( $priv ? ' <a href="' . esc_url( $priv ) . '">Privacy policy</a>' : '' ) . '</span>'
+		. '</div>';
+}, 10, 2 );
