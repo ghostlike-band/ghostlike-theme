@@ -6,7 +6,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const GL_CONTENT_VERSION = 2;
+const GL_CONTENT_VERSION = 3;
 
 add_action( 'init', function () {
 	$v = (int) get_option( 'gl_content_version', 1 );
@@ -56,6 +56,14 @@ add_action( 'init', function () {
 					'Thank you to everyone who listened, shared and came to the shows. This one is yours now.'
 				),
 			) );
+		}
+	}
+
+	// v3: Release-Datum für die EP (strukturierte Daten), falls noch leer
+	if ( $v < 3 ) {
+		$ep = get_posts( array( 'post_type' => 'gl_release', 'post_status' => 'any', 'title' => 'The Quiet Collapse', 'posts_per_page' => 1, 'fields' => 'ids' ) )[0] ?? 0;
+		if ( $ep && ! get_post_meta( $ep, '_gl_release_date', true ) ) {
+			update_post_meta( $ep, '_gl_release_date', '2026-01-16' );
 		}
 	}
 

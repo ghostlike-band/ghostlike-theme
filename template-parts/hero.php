@@ -73,7 +73,7 @@ $total = count( $slides );
 				<div class="slide__content">
 					<?php if ( $s['kicker'] ) : ?><span class="meta meta--hell"><?php echo esc_html( $s['kicker'] ); ?></span><?php endif; ?>
 					<?php
-					$tag = $first ? 'h1' : 'h2';
+					$tag = 'h2'; // H1 der Startseite steht unsichtbar in front-page.php
 					if ( $s['logo'] ) {
 						echo '<' . $tag . ' class="slide__logo logo"><span class="visually-hidden">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
 						gl_logo();

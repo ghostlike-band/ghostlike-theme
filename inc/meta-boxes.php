@@ -28,6 +28,7 @@ function gl_fields() {
 			'fields' => array(
 				'featured'    => array( 'label' => 'Groß auf der Startseite zeigen', 'type' => 'checkbox' ),
 				'kicker'      => array( 'label' => 'Kleine Zeile oben', 'type' => 'text', 'help' => 'z. B. „EP · Era I · 5 songs · Out now“' ),
+				'release_date'=> array( 'label' => 'Release-Datum', 'type' => 'date', 'help' => 'Für Google (strukturierte Daten) und KI-Suchen.' ),
 				'headline'    => array( 'label' => 'Headline (optional)', 'type' => 'textarea', 'rows' => 2, 'help' => 'Leer = Titel. Zeilenumbruch = neue Zeile.' ),
 				'tracks'      => array( 'label' => 'Tracklist', 'type' => 'textarea', 'rows' => 7, 'help' => 'Eine Zeile pro Song: <code>Titel | single | Video-Link | Cover-URL</code>. Nur der Titel ist Pflicht, z. B. <code>Spiral</code> oder <code>Deep Blue Sea | single | https://youtu.be/…</code>' ),
 				'spotify'     => array( 'label' => 'Spotify', 'type' => 'url' ),

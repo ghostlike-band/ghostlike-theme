@@ -24,6 +24,7 @@ $cta_url = str_starts_with( (string) $cta_url, '#' ) ? gl_anchor( substr( $cta_u
 			<h2 class="display-l" data-split><?php echo gl_lines( gl_opt( 'bio_heading' ) ); ?></h2>
 			<?php if ( gl_opt( 'bio_lead' ) ) : ?><p class="band__bio" data-reveal><?php echo esc_html( gl_opt( 'bio_lead' ) ); ?></p><?php endif; ?>
 			<?php if ( gl_opt( 'bio_text' ) ) : ?><p class="band__bio band__bio--klein" data-reveal><?php echo esc_html( gl_opt( 'bio_text' ) ); ?></p><?php endif; ?>
+			<?php echo gl_fans_of_line(); // phpcs:ignore -- escaped ?>
 			<?php if ( gl_opt( 'bio_cta_text' ) && $cta_url ) : ?>
 				<a href="<?php echo esc_url( $cta_url ); ?>" class="btn" data-reveal<?php echo gl_target( $cta_url ); ?>><?php echo esc_html( gl_opt( 'bio_cta_text' ) ); ?> <span class="pfeil">↗</span></a>
 			<?php endif; ?>
