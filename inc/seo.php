@@ -331,6 +331,9 @@ add_filter( 'query_vars', function ( $v ) {
 	return $v;
 } );
 
+// Kein Schrägstrich anhängen (/llms.txt muss exakt so erreichbar sein)
+add_filter( 'redirect_canonical', fn( $url ) => get_query_var( 'gl_llms' ) ? false : $url );
+
 add_action( 'template_redirect', function () {
 	if ( ! get_query_var( 'gl_llms' ) ) {
 		return;
