@@ -47,7 +47,7 @@ add_action( 'customize_register', function ( $c ) {
 	$fields = array(
 		'seo_title'       => array( 'Seitentitel Startseite', 'text', 'Erscheint als blaue Zeile bei Google. Ideal 50–60 Zeichen.' ),
 		'seo_description' => array( 'Beschreibung (Meta-Description)', 'textarea', 'Zwei Sätze unter dem Titel bei Google. Ideal 140–160 Zeichen.' ),
-		'fans_of'         => array( 'For fans of / Sounds like', 'text', 'Bekannte Bands, mit Komma getrennt. Erscheint sichtbar unter der Bio und in den Daten für Suchmaschinen.' ),
+		'fans_of'         => array( 'For fans of / Sounds like', 'text', 'Bekannte Bands, mit Komma getrennt. Steckt in Meta-Beschreibung, strukturierten Daten und llms.txt. Auf der Seite nur sichtbar, wenn unten angehakt.' ),
 		'genres'          => array( 'Genres', 'text', 'Mit Komma getrennt.' ),
 		'city'            => array( 'Stadt', 'text', '' ),
 		'country'         => array( 'Land', 'text', '' ),
@@ -58,6 +58,8 @@ add_action( 'customize_register', function ( $c ) {
 		$c->add_setting( 'gl_' . $k, array( 'default' => gl_seo_defaults()[ $k ], 'sanitize_callback' => $f[1] === 'textarea' ? 'sanitize_textarea_field' : 'sanitize_text_field' ) );
 		$c->add_control( 'gl_' . $k, array( 'label' => $f[0], 'section' => 'gl_seo', 'type' => $f[1], 'description' => $f[2] ) );
 	}
+	$c->add_setting( 'gl_fans_of_visible', array( 'default' => 0, 'sanitize_callback' => 'absint' ) );
+	$c->add_control( 'gl_fans_of_visible', array( 'label' => '„For fans of“ unter der Bio sichtbar anzeigen', 'section' => 'gl_seo', 'type' => 'checkbox' ) );
 	$c->add_setting( 'gl_share_image', array( 'sanitize_callback' => 'absint' ) );
 	$c->add_control( new WP_Customize_Media_Control( $c, 'gl_share_image', array( 'label' => 'Vorschaubild beim Teilen', 'section' => 'gl_seo', 'mime_type' => 'image', 'description' => '1200 × 630 px. Für Startseite und Seiten ohne Beitragsbild. Leer = Bandfoto.' ) ) );
 }, 20 );
@@ -399,7 +401,7 @@ add_action( 'template_redirect', function () {
 
 function gl_fans_of_line() {
 	$fans = gl_seo_list( 'fans_of' );
-	if ( ! $fans ) {
+	if ( ! $fans || ! get_theme_mod( 'gl_fans_of_visible', 0 ) ) {
 		return '';
 	}
 	return '<p class="fans-of" data-reveal><span class="meta">For fans of</span> <span class="fans-of__list">' . esc_html( implode( ' · ', $fans ) ) . '</span></p>';
