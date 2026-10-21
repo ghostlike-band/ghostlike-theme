@@ -73,6 +73,18 @@ function gl_mig_page() {
 	?>
 	<div class="wrap">
 		<h1>Umzug auf <?php echo esc_html( GL_MIG_TO ); ?></h1>
+		<?php if ( gl_mig_active() ) : ?>
+			<div class="card" style="max-width:760px;margin:16px 0 24px">
+				<h2>Nach dem Umzug: neu.ghostlike.de weiterleiten</h2>
+				<p>Leitet alle Aufrufe dieser Kopie per 301 auf <strong>https://<?php echo esc_html( GL_MIG_TO ); ?></strong> um, inklusive Kalender-Abos und Zusage-Links. Danach ist dieses Backend nicht mehr erreichbar (Rückgängig: die Zeilen „GHOSTLIKE-UMZUG“ aus der .htaccess entfernen).</p>
+				<?php if ( isset( $_GET['redirected'] ) ) : ?><p><strong>Weiterleitung ist aktiv.</strong></p><?php endif; ?>
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+					<input type="hidden" name="action" value="gl_mig_redirect"><?php wp_nonce_field( 'gl_mig_redirect' ); ?>
+					<label><input type="checkbox" name="confirm" value="1" required> www.ghostlike.de läuft, jetzt weiterleiten</label>
+					<?php submit_button( 'Weiterleitung aktivieren', 'primary', 'submit', false ); ?>
+				</form>
+			</div>
+		<?php endif; ?>
 		<?php if ( ! gl_mig_active() ) : ?>
 			<p>Diese Seite läuft bereits unter <strong><?php echo esc_html( home_url() ); ?></strong>.</p>
 		<?php else : ?>
@@ -173,5 +185,20 @@ add_action( 'admin_post_gl_mig_run', function () {
 	echo '<h1>Umzug ausgeführt</h1><p><a href="https://' . GL_MIG_TO . '/wp-admin/admin.php?page=ghostlike-umzug">Weiter zu https://' . GL_MIG_TO . '/wp-admin</a> (neu einloggen)</p><pre style="white-space:pre-wrap;background:#f6f7f7;padding:12px">';
 	echo esc_html( implode( "\n", $log ) );
 	echo '</pre></body>';
+	exit;
+} );
+
+add_action( 'admin_post_gl_mig_redirect', function () {
+	check_admin_referer( 'gl_mig_redirect' );
+	if ( ! current_user_can( 'manage_options' ) || ! gl_mig_active() || empty( $_POST['confirm'] ) ) {
+		wp_die( 'Nicht erlaubt.' );
+	}
+	$file  = ABSPATH . '.htaccess';
+	$old   = is_file( $file ) ? (string) file_get_contents( $file ) : '';
+	$block = "# BEGIN GHOSTLIKE-UMZUG\n<IfModule mod_rewrite.c>\nRewriteEngine On\nRewriteRule ^(.*)$ https://" . GL_MIG_TO . "/$1 [R=301,L]\n</IfModule>\n# END GHOSTLIKE-UMZUG\n\n";
+	if ( strpos( $old, 'GHOSTLIKE-UMZUG' ) === false ) {
+		file_put_contents( $file, $block . $old );
+	}
+	wp_safe_redirect( admin_url( 'admin.php?page=ghostlike-umzug&redirected=1' ) );
 	exit;
 } );

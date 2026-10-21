@@ -321,9 +321,9 @@ function gl_seo_graph() {
 
 add_action( 'init', function () {
 	add_rewrite_rule( '^llms\.txt$', 'index.php?gl_llms=1', 'top' );
-	if ( get_option( 'gl_rewrite_v' ) !== 'llms1' ) {
+	if ( get_option( 'gl_rewrite_v' ) !== 'llms2' ) {
 		flush_rewrite_rules( false );
-		update_option( 'gl_rewrite_v', 'llms1' );
+		update_option( 'gl_rewrite_v', 'llms2' );
 	}
 }, 20 );
 add_filter( 'query_vars', function ( $v ) {
