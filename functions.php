@@ -31,6 +31,7 @@ require GL_DIR . '/inc/emails-admin.php';
 require GL_DIR . '/inc/shortcodes.php';
 require GL_DIR . '/inc/bildpool.php';
 require GL_DIR . '/inc/seo.php';
+require GL_DIR . '/inc/migrate.php';
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
