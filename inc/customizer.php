@@ -82,9 +82,6 @@ add_action( 'customize_register', function ( WP_Customize_Manager $c ) {
 
 	// Footer & Login
 	$add( 'footer_meta', 'gl_footer', 'Kleine Zeile unten links' );
-	$add( 'member_login_url', 'gl_footer', 'Link „Member login“', 'url', 'esc_url_raw' );
-	$c->add_setting( 'gl_member_login_header', array( 'default' => 1, 'sanitize_callback' => 'absint' ) );
-	$c->add_control( 'gl_member_login_header', array( 'label' => 'Member-Login oben rechts im Header zeigen', 'section' => 'gl_footer', 'type' => 'checkbox' ) );
 } );
 
 function gl_sanitize_link( $v ) {

@@ -26,10 +26,6 @@
 			}
 			?>
 		</div>
-		<div>
-			<span class="meta">Band</span>
-			<a href="<?php echo esc_url( gl_opt( 'member_login_url' ) ); ?>" class="btn btn--klein">Member login <span class="pfeil">↗</span></a>
-		</div>
 	</div>
 	<div class="footer__base meta">
 		<span><?php echo esc_html( gl_opt( 'footer_meta' ) ); ?></span><span>© <?php echo esc_html( wp_date( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?></span>
