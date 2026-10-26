@@ -162,3 +162,37 @@ function gl_updates_page() {
 	</div>
 	<?php
 }
+
+/* ================= 1-KLICK-KNOPF OBEN IN DER ADMIN-LEISTE ================= */
+
+add_action( 'admin_bar_menu', function ( $bar ) {
+	if ( ! is_admin() || ! current_user_can( 'update_plugins' ) || ! current_user_can( 'update_themes' ) ) {
+		return;
+	}
+	$n = count( gl_pending_updates() );
+	$bar->add_node( array(
+		'id'    => 'gl-update-all',
+		'title' => '<span class="ab-icon dashicons dashicons-update" aria-hidden="true"></span><span class="ab-label">' . ( $n ? 'Alles aktualisieren (' . $n . ')' : 'Alles aktualisieren' ) . '</span>',
+		'href'  => wp_nonce_url( admin_url( 'admin-post.php?action=gl_update_all' ), 'gl_update_all' ),
+		'meta'  => array(
+			'class'   => $n ? 'gl-has-updates' : '',
+			'title'   => $n ? $n . ' Update(s) bereit: Theme, Plugins und Übersetzungen mit einem Klick installieren' : 'Nach Updates suchen und alles Anstehende installieren',
+			'onclick' => "var l=this.querySelector('.ab-label');if(l){l.textContent='Aktualisiere … bitte warten';}this.style.pointerEvents='none';",
+		),
+	) );
+}, 90 );
+
+add_action( 'admin_head', function () {
+	if ( ! current_user_can( 'update_plugins' ) ) {
+		return;
+	}
+	?>
+	<style>
+		#wpadminbar #wp-admin-bar-gl-update-all .ab-icon:before { content: "\f463"; top: 2px; }
+		#wpadminbar #wp-admin-bar-gl-update-all.gl-has-updates > .ab-item { background: #7C9A85; color: #0A0B0A; font-weight: 600; }
+		#wpadminbar #wp-admin-bar-gl-update-all.gl-has-updates > .ab-item .ab-icon:before { color: #0A0B0A; }
+		#wpadminbar #wp-admin-bar-gl-update-all.gl-has-updates:hover > .ab-item { background: #93b39c; color: #0A0B0A; }
+		@media screen and (max-width: 782px) { #wpadminbar #wp-admin-bar-gl-update-all { display: block; } #wpadminbar #wp-admin-bar-gl-update-all .ab-label { display: none; } #wpadminbar #wp-admin-bar-gl-update-all .ab-icon:before { font-size: 28px; top: 0; } }
+	</style>
+	<?php
+} );
