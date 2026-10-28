@@ -103,7 +103,7 @@ function gl_create_de_page() {
 	$c .= $pp( 'Am 16. Januar 2026 ist unsere Debüt-EP <strong>„The Quiet Collapse“</strong> erschienen, mit fünf Songs: <em>Deep Blue Sea</em>, <em>Nothing’s Okay</em>, <em>The Price We Pay</em>, <em>Who Am I</em> und <em>Spiral</em>. Drei davon kamen vorab als Singles mit eigenem Musikvideo. Die EP gibt es auf Spotify, Apple Music, Deezer, Amazon Music und allen anderen Streamingdiensten.' );
 	$c .= $pp( 'Gerade sind wir wieder im Studio und arbeiten an neuen Songs. ' . $a( home_url( '/news/' ), 'Neuigkeiten aus dem Studio' ) . ' (auf Englisch).' );
 	$c .= $h( 'Live & Booking in Augsburg, München und Bayern' );
-	$c .= $pp( 'Ihr veranstaltet ein Konzert, ein Festival oder eine Clubshow in Augsburg, München oder anderswo in Bayern und sucht eine Metalcore-Band? Schreibt uns an ' . $a( 'mailto:' . $mail, $mail ) . '. Wir freuen uns über Anfragen von Veranstaltern, Clubs, Jugendzentren und anderen Bands, gern auch für gemeinsame Shows.' );
+	$c .= $pp( 'Ihr veranstaltet ein Konzert, ein Festival oder eine Clubshow und sucht eine Metalcore-Band? Schreibt uns an ' . $a( 'mailto:' . $mail, $mail ) . '. Wir freuen uns über Anfragen von Veranstaltern, Clubs und anderen Bands, gern auch für gemeinsame Shows.' );
 	$c .= $pp( 'Aktuelle Konzerttermine findet ihr ' . $a( home_url( '/#tour' ), 'auf der Startseite' ) . '.' );
 	if ( $press ) {
 		$c .= $h( 'Presse' );
