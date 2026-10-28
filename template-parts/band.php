@@ -12,7 +12,7 @@ $img     = $img_id ? wp_get_attachment_image_url( $img_id, 'gl-hero' ) : GL_URI 
 $srcset  = $img_id ? wp_get_attachment_image_srcset( $img_id, 'gl-hero' ) : '';
 $mobile  = $mob_id ? wp_get_attachment_image_url( $mob_id, 'large' ) : '';
 $alt     = $img_id ? get_post_meta( $img_id, '_wp_attachment_image_alt', true ) : '';
-$alt     = $alt ?: get_bloginfo( 'name' );
+$alt     = $alt && strtolower( $alt ) !== 'ghostlike' ? $alt : 'GHOSTLIKE – metalcore band from Augsburg, Bavaria (Germany)';
 $meta    = $img_id ? wp_get_attachment_metadata( $img_id ) : array( 'width' => 1800, 'height' => 1200 );
 $cta_url = gl_opt( 'bio_cta_url' );
 $cta_url = str_starts_with( (string) $cta_url, '#' ) ? gl_anchor( substr( $cta_url, 1 ) ) : $cta_url;

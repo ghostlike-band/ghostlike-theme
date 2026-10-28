@@ -96,7 +96,7 @@
   /* ================= SCROLL-ANIMATIONEN ================= */
   $$('[data-split]').forEach((el) => {
     const lines = el.innerHTML.split(/<br\s*\/?>/i);
-    el.innerHTML = lines.map((l, i) => `<span class="split-line" style="--i:${i}"><span>${l.trim()}</span></span>`).join('');
+    el.innerHTML = lines.map((l, i) => `<span class="split-line" style="--i:${i}"><span>${l.trim()}</span></span>`).join(' ');
   });
   $$('[data-stagger]').forEach((el) => [...el.children].forEach((c, i) => c.style.setProperty('--i', i)));
 

@@ -48,7 +48,7 @@ if ( $handle && preg_match( '/^(.+?)(band)$/i', $handle, $m ) ) {
 	<?php elseif ( $images ) : ?>
 		<div class="feed" data-stagger>
 			<?php foreach ( $images as $src ) : ?>
-				<a href="<?php echo esc_url( $url ?: '#' ); ?>" target="_blank" rel="noopener"><img src="<?php echo esc_url( $src ); ?>" alt="" loading="lazy"><span class="meta meta--hell">Instagram ↗</span></a>
+				<a href="<?php echo esc_url( $url ?: '#' ); ?>" target="_blank" rel="noopener"><img src="<?php echo esc_url( $src ); ?>" alt="GHOSTLIKE on Instagram" loading="lazy"><span class="meta meta--hell">Instagram ↗</span></a>
 			<?php endforeach; ?>
 		</div>
 	<?php endif; ?>

@@ -21,7 +21,7 @@ foreach ( $q->posts as $p ) {
 		'thumb'    => $thumb,
 		'image'    => $thumb ? wp_get_attachment_image_url( $thumb, 'gl-hero' ) : '',
 		'srcset'   => $thumb ? wp_get_attachment_image_srcset( $thumb, 'gl-hero' ) : '',
-		'alt'      => $thumb ? get_post_meta( $thumb, '_wp_attachment_image_alt', true ) : '',
+		'alt'      => ( $thumb ? get_post_meta( $thumb, '_wp_attachment_image_alt', true ) : '' ) ?: wp_strip_all_tags( get_the_title( $p ) ) . ' – GHOSTLIKE, metalcore band from Augsburg', // ohne Alt-Text: Titel der Slide
 		'mobile'   => gl_meta( $p->ID, 'image_mobile' ),
 		'focus'    => gl_meta( $p->ID, 'focus', 'center' ),
 		'focus_m'  => gl_meta( $p->ID, 'focus_mobile', 'center 20%' ),

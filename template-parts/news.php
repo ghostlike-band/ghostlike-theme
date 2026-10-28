@@ -20,7 +20,7 @@ $cat     = function ( $p ) {
 	<div class="section__head section__head--row">
 		<div>
 			<span class="meta" data-reveal>News</span>
-			<h2 class="display-l" data-split>Studio<br>log</h2>
+			<h2 class="display-l" data-split>Studio <br>log</h2>
 		</div>
 		<?php if ( $all_url ) : ?><a href="<?php echo esc_url( $all_url ); ?>" class="meta meta--hell unterstrichen" data-reveal>All posts ↗</a><?php endif; ?>
 	</div>
@@ -28,7 +28,7 @@ $cat     = function ( $p ) {
 	<div class="news-grid<?php echo $posts ? '' : ' news-grid--einzeln'; ?>">
 		<a class="post post--gross" href="<?php echo esc_url( get_permalink( $first ) ); ?>" data-reveal>
 			<?php if ( has_post_thumbnail( $first ) ) : ?>
-				<div class="post__img"><img src="<?php echo esc_url( get_the_post_thumbnail_url( $first, 'gl-card' ) ); ?>" alt="" loading="lazy"></div>
+				<div class="post__img"><img src="<?php echo esc_url( get_the_post_thumbnail_url( $first, 'gl-card' ) ); ?>" alt="<?php echo esc_attr( get_the_title( $first ) ); ?>" loading="lazy"></div>
 			<?php endif; ?>
 			<div class="post__body">
 				<span class="post__meta"><span class="tag-s"><?php echo esc_html( $cat( $first ) ); ?></span><span class="meta"><?php echo esc_html( get_the_date( 'd.m.Y', $first ) ); ?></span></span>

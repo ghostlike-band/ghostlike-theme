@@ -27,7 +27,7 @@ foreach ( gl_platforms() as $key => $pl ) {
 <section class="section" id="music">
 	<div class="section__head">
 		<span class="meta" data-reveal>Releases</span>
-		<h2 class="display-l" data-split>Latest<br>release</h2>
+		<h2 class="display-l" data-split>Latest <br>release</h2>
 	</div>
 
 	<article class="release">
@@ -78,7 +78,7 @@ foreach ( gl_platforms() as $key => $pl ) {
 					$url = gl_meta( $r->ID, 'smartlink' ) ?: gl_meta( $r->ID, 'spotify' ) ?: gl_meta( $r->ID, 'bandcamp' ) ?: gl_meta( $r->ID, 'youtube' );
 					?>
 					<li>
-						<?php if ( has_post_thumbnail( $r ) ) : ?><img src="<?php echo esc_url( get_the_post_thumbnail_url( $r, 'thumbnail' ) ); ?>" alt="" loading="lazy"><?php endif; ?>
+						<?php if ( has_post_thumbnail( $r ) ) : ?><img src="<?php echo esc_url( get_the_post_thumbnail_url( $r, 'thumbnail' ) ); ?>" alt="<?php echo esc_attr( 'Cover: ' . get_the_title( $r ) . ' – GHOSTLIKE' ); ?>" loading="lazy"><?php endif; ?>
 						<span class="label"><?php echo esc_html( get_the_title( $r ) ); ?></span>
 						<span class="meta"><?php echo esc_html( gl_meta( $r->ID, 'kicker' ) ); ?></span>
 						<?php if ( $url ) : ?><a href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener" class="track__video">Listen <span class="pfeil">↗</span></a><?php endif; ?>

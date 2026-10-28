@@ -24,6 +24,9 @@
 			} elseif ( get_privacy_policy_url() ) {
 				echo '<a href="' . esc_url( get_privacy_policy_url() ) . '">Privacy</a>';
 			}
+			if ( function_exists( 'gl_de_page' ) && ( $de = gl_de_page() ) ) {
+				echo '<a href="' . esc_url( get_permalink( $de ) ) . '" hreflang="de" lang="de">Deutsch</a>';
+			}
 			?>
 		</div>
 	</div>

@@ -23,10 +23,11 @@ function gl_seo_plugin_active() {
 function gl_seo_defaults() {
 	return array(
 		'seo_title'       => 'GHOSTLIKE – Metalcore Band from Augsburg, Germany',
-		'seo_description' => 'GHOSTLIKE is a metalcore band from Augsburg, Germany. Heavy, atmospheric and cinematic – for fans of Architects, Bad Omens, Spiritbox and Bring Me The Horizon. Debut EP The Quiet Collapse out now.',
+		'seo_description' => 'GHOSTLIKE is a metalcore band from Augsburg, Bavaria (Germany) – heavy, atmospheric, cinematic. For fans of Architects, Bad Omens and Spiritbox. Debut EP out now.',
 		'fans_of'         => 'Architects, Bad Omens, Spiritbox, Bring Me The Horizon',
 		'genres'          => 'Metalcore, Post-Hardcore, Alternative Metal',
 		'city'            => 'Augsburg',
+		'region'          => 'Bavaria',
 		'country'         => 'Germany',
 		'founded'         => '2025',
 		'press'           => "Paranoyd Magazin – Interview (2025) | https://paranoyd-magazin.de/interview/ghostlike-frisch-und-doch-bekannt/\nLelahel Metal – Interview (2025) | https://www.lelahelmetal.net/2025/10/interview-ghostlike.html\nFrontstage Magazine – Debut single news (2025) | https://frontstage-magazine.de/2025/10/09/ghostlike-veroeffentlichen-ihre-erste-single-nothings-okay/",
@@ -50,6 +51,7 @@ add_action( 'customize_register', function ( $c ) {
 		'fans_of'         => array( 'For fans of / Sounds like', 'text', 'Bekannte Bands, mit Komma getrennt. Steckt in Meta-Beschreibung, strukturierten Daten und llms.txt. Auf der Seite nur sichtbar, wenn unten angehakt.' ),
 		'genres'          => array( 'Genres', 'text', 'Mit Komma getrennt.' ),
 		'city'            => array( 'Stadt', 'text', '' ),
+		'region'          => array( 'Bundesland / Region', 'text', 'Englisch, z. B. Bavaria' ),
 		'country'         => array( 'Land', 'text', '' ),
 		'founded'         => array( 'Gründungsjahr', 'text', '' ),
 		'press'           => array( 'Presse (für llms.txt)', 'textarea', 'Eine Zeile pro Artikel: Titel | Link' ),
@@ -138,7 +140,7 @@ add_action( 'wp_head', function () {
 	$tags = array(
 		array( 'name', 'description', $desc ),
 		array( 'property', 'og:site_name', 'GHOSTLIKE' ),
-		array( 'property', 'og:locale', 'en_US' ),
+		array( 'property', 'og:locale', apply_filters( 'gl_seo_locale', 'en_US' ) ),
 		array( 'property', 'og:type', $type ),
 		array( 'property', 'og:title', wp_strip_all_tags( $title ) ),
 		array( 'property', 'og:description', $desc ),
@@ -171,7 +173,8 @@ add_action( 'wp_head', function () {
 
 // Suche, 404 und Anhangseiten nicht indexieren
 add_filter( 'wp_robots', function ( $robots ) {
-	if ( is_search() || is_404() || is_attachment() || is_author() || is_date() ) {
+	$legal = is_page() && ( (int) get_queried_object_id() === (int) get_option( 'wp_page_for_privacy_policy' ) || is_page( array( 'imprint', 'impressum', 'privacy-policy', 'datenschutz' ) ) );
+	if ( is_search() || is_404() || is_attachment() || is_author() || is_date() || $legal ) { // Rechtliches nicht in die Suchergebnisse
 		$robots['noindex'] = true;
 		$robots['follow']  = true;
 	} elseif ( get_option( 'blog_public' ) ) {
@@ -219,11 +222,11 @@ function gl_seo_band() {
 		'image'            => $img,
 		'logo'             => GL_URI . '/assets/img/email-logo.png',
 		'foundingDate'     => gl_seo( 'founded' ),
-		'foundingLocation' => array( '@type' => 'Place', 'name' => gl_seo( 'city' ) . ', ' . gl_seo( 'country' ) ),
-		'location'         => array( '@type' => 'Place', 'address' => array( '@type' => 'PostalAddress', 'addressLocality' => gl_seo( 'city' ), 'addressCountry' => gl_seo( 'country' ) === 'Germany' ? 'DE' : gl_seo( 'country' ) ) ),
+		'foundingLocation' => array( '@type' => 'Place', 'name' => gl_seo( 'city' ) . ', ' . gl_seo( 'region' ) . ', ' . gl_seo( 'country' ) ),
+		'location'         => array( '@type' => 'Place', 'name' => gl_seo( 'city' ) . ', ' . gl_seo( 'region' ), 'address' => array( '@type' => 'PostalAddress', 'addressLocality' => gl_seo( 'city' ), 'addressRegion' => gl_seo( 'region' ), 'addressCountry' => gl_seo( 'country' ) === 'Germany' ? 'DE' : gl_seo( 'country' ) ) ),
 		'sameAs'           => $same,
 		'member'           => $members,
-		'keywords'         => implode( ', ', array_merge( gl_seo_list( 'genres' ), array_map( fn( $f ) => 'sounds like ' . $f, $fans ), array( 'German metalcore', 'metalcore band ' . gl_seo( 'city' ) ) ) ),
+		'keywords'         => implode( ', ', array_merge( gl_seo_list( 'genres' ), array_map( fn( $f ) => 'sounds like ' . $f, $fans ), array( 'German metalcore', 'metalcore band ' . gl_seo( 'city' ), 'metalcore ' . gl_seo( 'region' ), 'Metalcore Augsburg', 'Metalcore Bayern', 'Metalcore-Band Deutschland', 'Band aus Augsburg' ) ) ),
 	);
 	return array_filter( $band );
 }
@@ -293,7 +296,10 @@ function gl_seo_graph() {
 	$graph = array(
 		array( '@type' => 'WebSite', '@id' => home_url( '/#website' ), 'url' => home_url( '/' ), 'name' => 'GHOSTLIKE', 'inLanguage' => 'en', 'publisher' => array( '@id' => gl_seo_band_id() ) ),
 	);
-	if ( is_front_page() ) {
+	if ( gl_is_de() ) {
+		$graph[] = gl_seo_band();
+		$graph[] = array( '@type' => 'WebPage', '@id' => get_permalink() . '#webpage', 'url' => get_permalink(), 'name' => get_the_title(), 'description' => gl_seo_description(), 'inLanguage' => 'de-DE', 'isPartOf' => array( '@id' => home_url( '/#website' ) ), 'about' => array( '@id' => gl_seo_band_id() ) );
+	} elseif ( is_front_page() ) {
 		$graph[] = gl_seo_band();
 		$graph   = array_merge( $graph, gl_seo_albums(), gl_seo_events() );
 	} else {
@@ -355,6 +361,9 @@ add_action( 'template_redirect', function () {
 		$l[] = '- Members: ' . implode( ', ', $members );
 	}
 	$l[] = '- Website: ' . home_url( '/' );
+	if ( function_exists( 'gl_de_page' ) && gl_de_page() ) {
+		$l[] = '- Auf Deutsch: ' . get_permalink( gl_de_page() );
+	}
 	$l[] = '';
 	$l[] = '## About';
 	$l[] = '';
@@ -406,3 +415,53 @@ function gl_fans_of_line() {
 	}
 	return '<p class="fans-of" data-reveal><span class="meta">For fans of</span> <span class="fans-of__list">' . esc_html( implode( ' · ', $fans ) ) . '</span></p>';
 }
+
+
+/* ================= DEUTSCHE SEITE (/de/) ================= */
+// Die Website ist Englisch. Für lokale Suchen („Metalcore Band Augsburg“, „Metalcore Bayern“) gibt es eine deutsche
+// Landingpage unter /de/, als deutsche Version der Startseite markiert (hreflang). Text im Backend unter Seiten änderbar.
+
+function gl_de_page() {
+	static $p = false;
+	if ( false === $p ) {
+		$p = get_page_by_path( 'de' );
+		$p = ( $p && $p->post_status === 'publish' ) ? $p : null;
+	}
+	return $p;
+}
+
+function gl_is_de() {
+	$p = gl_de_page();
+	return $p && is_page( $p->ID );
+}
+
+// Sprache im <html>-Tag passend zum Inhalt (Backend bleibt Deutsch)
+add_filter( 'language_attributes', function ( $out, $doctype ) {
+	if ( is_admin() ) {
+		return $out;
+	}
+	return preg_replace( '/lang="[^"]*"/', 'lang="' . ( gl_is_de() ? 'de-DE' : 'en' ) . '"', $out );
+}, 10, 2 );
+
+// Titel der deutschen Seite ohne angehängtes „– GHOSTLIKE“ (steht schon vorn)
+add_filter( 'document_title_parts', function ( $parts ) {
+	if ( gl_is_de() && ! gl_seo_plugin_active() ) {
+		return array( 'title' => get_the_title( gl_de_page() ) );
+	}
+	return $parts;
+}, 20 );
+
+// Englisch ↔ Deutsch verknüpfen
+add_action( 'wp_head', function () {
+	$de = gl_de_page();
+	if ( ! $de || gl_seo_plugin_active() || ! ( is_front_page() || gl_is_de() ) ) {
+		return;
+	}
+	printf( '<link rel="alternate" hreflang="en" href="%1$s">' . "\n" . '<link rel="alternate" hreflang="de" href="%2$s">' . "\n" . '<link rel="alternate" hreflang="x-default" href="%1$s">' . "\n", esc_url( home_url( '/' ) ), esc_url( get_permalink( $de ) ) );
+}, 3 );
+
+// og:locale und strukturierte Daten auf Deutsch für /de/
+add_filter( 'gl_seo_locale', fn( $l ) => gl_is_de() ? 'de_DE' : $l );
+
+// Kurzbeschreibung (Meta-Description) auch bei Seiten im Backend bearbeitbar
+add_action( 'init', fn() => add_post_type_support( 'page', 'excerpt' ) );

@@ -21,7 +21,7 @@ $year = $shows ? wp_date( 'Y', strtotime( gl_meta( $shows[0]->ID, 'date' ) ) ) :
 	<div class="section__head section__head--row">
 		<div>
 			<span class="meta" data-reveal>Live</span>
-			<h2 class="display-l" data-split>Tour<br><?php echo esc_html( $year ); ?></h2>
+			<h2 class="display-l" data-split>Tour <br><?php echo esc_html( $year ); ?></h2>
 		</div>
 		<?php if ( gl_opt( 'instagram' ) ) : ?>
 			<a href="<?php echo esc_url( gl_opt( 'instagram' ) ); ?>" target="_blank" rel="noopener" class="meta meta--hell unterstrichen" data-reveal>Get notified ↗</a>

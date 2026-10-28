@@ -30,8 +30,8 @@ function gl_defaults() {
 		'instagram_handle'=> 'ghostlikeband',
 		'youtube'         => 'https://www.youtube.com/@ghostlikeband',
 		'bandcamp'        => 'https://ghostlike.bandcamp.com',
-		'spotify'         => '',
-		'apple'           => '',
+		'spotify'         => 'https://open.spotify.com/artist/6qHehgWqgvLtEVFTbkBA80',
+		'apple'           => 'https://music.apple.com/de/artist/ghostlike/1846913330',
 		'contact_intro'   => 'Booking, press, collaborations, or just say hi. We read everything.',
 		'contact_email'   => get_option( 'admin_email' ),
 		'contact_email_booking' => '',
@@ -45,7 +45,7 @@ function gl_defaults() {
 /** Mehrzeiliger Text → sichere Zeilen mit <br>. */
 function gl_lines( $text ) {
 	$lines = array_filter( array_map( 'trim', explode( "\n", (string) $text ) ), 'strlen' );
-	return implode( '<br>', array_map( 'esc_html', $lines ) );
+	return implode( ' <br>', array_map( 'esc_html', $lines ) ); // Leerzeichen: Suchmaschinen lesen sonst „Nothing’sokay“
 }
 
 /** „A | B“-Zeilen in Arrays zerlegen. */

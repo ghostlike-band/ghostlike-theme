@@ -6,7 +6,7 @@ $privacy = gl_opt( 'privacy_url' ) ?: get_privacy_policy_url();
 <section class="section kontakt" id="contact">
 	<div class="kontakt__intro">
 		<span class="meta" data-reveal>Contact</span>
-		<h2 class="display-l" data-split>Get in<br>touch</h2>
+		<h2 class="display-l" data-split>Get in <br>touch</h2>
 		<?php if ( gl_opt( 'contact_intro' ) ) : ?><p data-reveal><?php echo esc_html( gl_opt( 'contact_intro' ) ); ?></p><?php endif; ?>
 	</div>
 	<form class="form" id="contact-form" novalidate data-reveal data-start="<?php echo esc_attr( time() ); ?>">
