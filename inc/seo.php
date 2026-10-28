@@ -465,3 +465,17 @@ add_filter( 'gl_seo_locale', fn( $l ) => gl_is_de() ? 'de_DE' : $l );
 
 // Kurzbeschreibung (Meta-Description) auch bei Seiten im Backend bearbeitbar
 add_action( 'init', fn() => add_post_type_support( 'page', 'excerpt' ) );
+
+// Impressum & Datenschutz sind noindex, also auch nicht in die Sitemap (sonst meldet die Search Console einen Widerspruch)
+add_filter( 'wp_sitemaps_posts_query_args', function ( $args, $post_type ) {
+	if ( $post_type === 'page' ) {
+		$ids = array_filter( array( (int) get_option( 'wp_page_for_privacy_policy' ) ) );
+		foreach ( array( 'imprint', 'impressum', 'privacy-policy', 'datenschutz' ) as $slug ) {
+			if ( $p = get_page_by_path( $slug ) ) {
+				$ids[] = $p->ID;
+			}
+		}
+		$args['post__not_in'] = array_merge( (array) ( $args['post__not_in'] ?? array() ), array_unique( $ids ) );
+	}
+	return $args;
+}, 10, 2 );
