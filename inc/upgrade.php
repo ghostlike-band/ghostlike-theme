@@ -97,7 +97,6 @@ function gl_create_de_page() {
 	$mail    = 'band@ghostlike.de';
 
 	$c  = $pp( '<strong>GHOSTLIKE ist eine Metalcore-Band aus Augsburg in Bayern.</strong> Seit 2025 verbinden fünf Musiker harte Riffs und Breakdowns mit atmosphärischen Flächen, cleanen Refrains und einer fast filmischen Dramaturgie: Metalcore mit Post-Hardcore-Einflüssen, laut, melancholisch und eingängig zugleich.' );
-	$c .= $pp( 'Unsere Songs entstehen im Proberaum in Augsburg. Live spielen wir in Augsburg, in Bayern und überall, wo man uns lässt.' );
 	$c .= $h( 'Die Band' );
 	$c .= $ul( $members ?: array( 'Fünf Musiker aus Augsburg' ) );
 	$c .= $h( 'Musik: Debüt-EP „The Quiet Collapse“' );
